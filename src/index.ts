@@ -1,6 +1,12 @@
-import { Elysia } from "elysia";
+import { baseElysia } from "@libs/elysia";
+import { docs } from "@libs/swagger";
 
-const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
+import api from "./api";
+
+export const app = baseElysia()
+  .use(docs)
+  .use(api)
+  .listen(process.env.PORT || 4056);
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`

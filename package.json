@@ -1,15 +1,50 @@
 {
-  "name": "xyzuan-cv-reviewer",
-  "version": "1.0.50",
+  "name": "xyzuan-elysiajs-boilerplate",
+  "version": "1.0.0",
+  "description": "A boilerplate project using Elysia framework, integrated with Swagger, Zod, and Prisma for a streamlined backend setup.",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts"
   },
+  "author": {
+    "name": "xyzuan",
+    "email": "jodyyuan@xyzuan.my.id",
+    "url": "https://xyzuan.my.id",
+    "github": "https://github.com/xyzuan",
+    "linkedin": "https://linkedin.com/in/xyzuan",
+    "organization": "xyzscape"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xyzuan/elysiajs-boilerplate.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "boilerplate",
+    "ElysiaJS",
+    "zod",
+    "swagger",
+    "typescript",
+    "prisma",
+    "bun"
+  ],
   "dependencies": {
-    "elysia": "latest"
+    "@elysiajs/cors": "^1.1.1",
+    "@elysiajs/swagger": "^1.1.5",
+    "elysia": "latest",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "prisma": "^5.22.0"
+  },
+  "engines": {
+    "bun": ">=0.8.0"
+  },
+  "homepage": "https://github.com/xyzuan/elysiajs-boilerplate#readme",
+  "bugs": {
+    "url": "https://github.com/xyzuan/elysiajs-boilerplate/issues"
   },
   "module": "src/index.js"
 }
