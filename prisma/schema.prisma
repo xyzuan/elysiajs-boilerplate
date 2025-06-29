@@ -19,6 +19,17 @@ enum UserRole {
   ADMIN
 }
 
+enum SKStatus {
+  VERIFY
+  APPROVED
+  REVISED
+  REJECTED
+}
+
+enum SKType {
+  KEMATIAN
+}
+
 model user {
   id           String    @id @default(uuid())
   name         String    @db.VarChar(60)
@@ -32,14 +43,28 @@ model user {
   address      String?
   refreshToken String?
   createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  updatedAt    DateTime? @updatedAt
 
-  sk_kematian  sk_kematian[]
+  user_sks     user_sk[]
+}
+
+model user_sk {
+  id          String   @id @default(cuid())
+  user_id     String
+  sk_id       String
+  sk_type     SKType
+  sk_status   SKStatus  @default(VERIFY)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+
+  user        user     @relation(fields: [user_id], references: [id])
+
+  @@index([user_id, sk_id], name: "user_sk_user_id_sk_id_idx")
 }
 
 model sk_kematian {
   id           String    @id @default(cuid())
-  reporter_id  String
+  name         String
   born_birth   DateTime
   born_place   String
   nik          String
@@ -48,6 +73,6 @@ model sk_kematian {
   death_date   DateTime
   death_place  String
   death_reason String?
-
-  reporter     user      @relation(fields: [reporter_id], references: [id])
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
 }

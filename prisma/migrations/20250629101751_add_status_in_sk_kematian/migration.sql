@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `sk_kematian` ADD COLUMN `sk_status` ENUM('VERIFY', 'APPROVED', 'REVISED', 'REJECTED') NOT NULL DEFAULT 'VERIFY';
