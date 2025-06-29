@@ -1,7 +1,6 @@
 import { createElysia } from "@libs/elysia";
-import signUpSchema from "./sign-up.schema";
 import { prismaClient } from "@libs/prisma";
-import { InternalServerErrorException } from "@constants/exceptions";
+import signUpSchema from "./sign-up.schema";
 
 export const SignUpController = createElysia()
   .use(signUpSchema)

@@ -33,13 +33,21 @@ model user {
   refreshToken String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+
+  sk_kematian  sk_kematian[]
 }
 
 model sk_kematian {
   id           String    @id @default(cuid())
+  reporter_id  String
   born_birth   DateTime
   born_place   String
   nik          String
   religion     String
   address      String
+  death_date   DateTime
+  death_place  String
+  death_reason String?
+
+  reporter     user      @relation(fields: [reporter_id], references: [id])
 }
