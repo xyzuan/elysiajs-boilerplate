@@ -1,7 +1,7 @@
 import Elysia, { t } from "elysia";
 
 const skKematianSchema = new Elysia().model({
-  "create-sk-kematian": t.Object({
+  "sk-kematian": t.Object({
     name: t.String(),
     born_birth: t.Date(),
     born_place: t.String(),

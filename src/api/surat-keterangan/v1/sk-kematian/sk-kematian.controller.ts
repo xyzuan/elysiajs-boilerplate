@@ -47,6 +47,33 @@ export const SkKematianController = createElysia({
       };
     },
     {
-      body: "create-sk-kematian",
+      body: "sk-kematian",
+    }
+  )
+  .put(
+    ":id",
+    async ({ params: { id }, body }) => {
+      const result = await prismaClient.$transaction(async (prisma) => {
+        const updatedAt = new Date();
+        const skKematian = await prisma.sk_kematian.update({
+          where: { id },
+          data: { ...body, updatedAt },
+        });
+
+        await prisma.user_sk.updateMany({
+          where: { sk_id: id },
+          data: { updatedAt },
+        });
+
+        return skKematian;
+      });
+
+      return {
+        status: "SUCCESS",
+        data: result,
+      };
+    },
+    {
+      body: "sk-kematian",
     }
   );
