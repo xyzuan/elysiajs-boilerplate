@@ -1,8 +1,8 @@
 import { createElysia } from "@libs/elysia";
-import HiController from "./controller/hi.controller";
+import { SignUpController } from "./auth/sign-up";
 
-const api = createElysia({ prefix: "v1/" }).group("hi", (api) =>
-  api.use(HiController)
+const api = createElysia({ prefix: "v1/" }).group("auth", (api) =>
+  api.use(SignUpController)
 );
 
 export default api;
