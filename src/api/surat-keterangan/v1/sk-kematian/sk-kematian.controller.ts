@@ -9,10 +9,14 @@ export const SkKematianController = createElysia({
 })
   .use(authJwt)
   .use(skKematianSchema)
-  .get(":id", async ({ params: { id } }) => {
-    const result = await prismaClient.sk_kematian.findUnique({
+  .get(":id", async ({ params: { id }, user }) => {
+    const result = await prismaClient.user_sk.findUnique({
       where: {
         id,
+        user_id: user.id,
+      },
+      include: {
+        sk_kematian: true,
       },
     });
 
@@ -28,22 +32,16 @@ export const SkKematianController = createElysia({
   .post(
     "",
     async ({ user, body }) => {
-      const result = await prismaClient.$transaction(async (prisma) => {
-        const skKematian = await prisma.sk_kematian.create({
-          data: {
-            ...body,
+      const result = await prismaClient.user_sk.create({
+        data: {
+          user_id: user.id,
+          sk_type: "KEMATIAN",
+          sk_kematian: {
+            create: {
+              ...body,
+            },
           },
-        });
-
-        await prisma.user_sk.create({
-          data: {
-            user_id: user.id,
-            sk_id: skKematian.id,
-            sk_type: "KEMATIAN",
-          },
-        });
-
-        return skKematian;
+        },
       });
 
       return {
@@ -57,26 +55,31 @@ export const SkKematianController = createElysia({
   )
   .put(
     ":id",
-    async ({ params: { id }, body }) => {
-      const result = await prismaClient.$transaction(async (prisma) => {
-        const updatedAt = new Date();
-        const result = await prisma.sk_kematian.update({
-          where: { id },
-          data: { ...body, updatedAt },
-        });
-
-        if (!result) {
-          throw new NotFoundException();
-        }
-
-        await prisma.user_sk.updateMany({
-          where: { sk_id: id },
-          data: { updatedAt },
-        });
-
-        return result;
+    async ({ params: { id }, user, body }) => {
+      const existingRecord = await prismaClient.user_sk.findUnique({
+        where: { id, sk_type: "KEMATIAN", user_id: user.id },
       });
 
+      if (!existingRecord) {
+        throw new NotFoundException("SK Kematian record not found");
+      }
+
+      const result = await prismaClient.user_sk.update({
+        where: {
+          id,
+          user_id: user.id,
+        },
+        data: {
+          sk_kematian: {
+            update: {
+              ...body,
+            },
+          },
+        },
+        include: {
+          sk_kematian: true,
+        },
+      });
       return {
         status: "SUCCESS",
         data: result,

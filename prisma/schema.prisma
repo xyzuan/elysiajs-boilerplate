@@ -5,10 +5,11 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  engineType = "binary"
+  provider      = "prisma-client-js"
+  engineType    = "binary"
   binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.1.x"]
 }
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -46,38 +47,37 @@ enum Gender {
 }
 
 model user {
-  id             String    @id @default(uuid())
-  name           String    @db.VarChar(60)
-  email          String    @unique
+  id             String         @id @default(uuid())
+  name           String         @db.VarChar(60)
+  email          String         @unique
   password       String
-  role           UserRole? @default(USER)
+  role           UserRole?      @default(USER)
   born_birth     DateTime?
   born_place     String?
   gender         Gender?
   work           String?
   marital_status MaritalStatus?
-  nik            String?   @unique
+  nik            String?        @unique
   religion       String?
   address        String?
   refreshToken   String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime? @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime?      @updatedAt
 
-  user_sks       user_sk[]
+  user_sks user_sk[]
 }
 
 model user_sk {
-  id          String   @id @default(cuid())
-  user_id     String
-  sk_id       String
-  sk_type     SKType
-  sk_status   SKStatus  @default(VERIFY)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
+  id        String    @id @default(cuid())
+  user_id   String
+  sk_type   SKType
+  sk_status SKStatus  @default(VERIFY)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
-  user        user     @relation(fields: [user_id], references: [id])
-
-  @@index([user_id, sk_id], name: "user_sk_user_id_sk_id_idx")
+  user           user            @relation(fields: [user_id], references: [id])
+  sk_kematian    sk_kematian?
+  sk_tidak_mampu sk_tidak_mampu?
 }
 
 model sk_kematian {
@@ -93,10 +93,13 @@ model sk_kematian {
   death_reason String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
+
+  user_sk_id String?  @unique
+  user_sk    user_sk? @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
 }
 
 model sk_tidak_mampu {
-  id             String    @id @default(cuid())
+  id             String        @id @default(cuid())
   name           String
   born_birth     DateTime
   born_place     String
@@ -107,6 +110,9 @@ model sk_tidak_mampu {
   reason         String
   work           String
   marital_status MaritalStatus
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime? @updatedAt
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime?     @updatedAt
+
+  user_sk_id String?  @unique
+  user_sk    user_sk? @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
 }

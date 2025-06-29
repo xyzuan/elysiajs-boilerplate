@@ -10,10 +10,14 @@ export const SkTidakMampuController = createElysia({
 })
   .use(authJwt)
   .use(skTidakMampuSchema)
-  .get(":id", async ({ params: { id } }) => {
-    const result = await prismaClient.sk_tidak_mampu.findUnique({
+  .get(":id", async ({ params: { id }, user }) => {
+    const result = await prismaClient.user_sk.findUnique({
       where: {
         id,
+        user_id: user.id,
+      },
+      include: {
+        sk_tidak_mampu: true,
       },
     });
 
@@ -29,24 +33,18 @@ export const SkTidakMampuController = createElysia({
   .post(
     "",
     async ({ user, body }) => {
-      const result = await prismaClient.$transaction(async (prisma) => {
-        const result = await prisma.sk_tidak_mampu.create({
-          data: {
-            ...body,
-            gender: body.gender as Gender,
-            marital_status: body.marital_status as MaritalStatus,
+      const result = await prismaClient.user_sk.create({
+        data: {
+          user_id: user.id,
+          sk_type: "TIDAK_MAMPU",
+          sk_tidak_mampu: {
+            create: {
+              ...body,
+              gender: body.gender as Gender,
+              marital_status: body.marital_status as MaritalStatus,
+            },
           },
-        });
-
-        await prisma.user_sk.create({
-          data: {
-            user_id: user.id,
-            sk_id: result.id,
-            sk_type: "TIDAK_MAMPU",
-          },
-        });
-
-        return result;
+        },
       });
 
       return {
@@ -60,37 +58,32 @@ export const SkTidakMampuController = createElysia({
   )
   .put(
     ":id",
-    async ({ params: { id }, body }) => {
-      const existingRecord = await prismaClient.sk_tidak_mampu.findUnique({
-        where: { id },
+    async ({ params: { id }, body, user }) => {
+      const existingRecord = await prismaClient.user_sk.findUnique({
+        where: { id, sk_type: "TIDAK_MAMPU", user_id: user.id },
       });
 
       if (!existingRecord) {
         throw new NotFoundException("SK Tidak Mampu record not found");
       }
 
-      const result = await prismaClient.$transaction(async (prisma) => {
-        const updatedAt = new Date();
-        const result = await prisma.sk_tidak_mampu.update({
-          where: { id },
-          data: {
-            ...body,
-            gender: body.gender as Gender,
-            marital_status: body.marital_status as MaritalStatus,
-            updatedAt,
+      const result = await prismaClient.user_sk.update({
+        where: {
+          id,
+          user_id: user.id,
+        },
+        data: {
+          sk_tidak_mampu: {
+            update: {
+              ...body,
+              gender: body.gender as Gender,
+              marital_status: body.marital_status as MaritalStatus,
+            },
           },
-        });
-
-        if (!result) {
-          throw new NotFoundException();
-        }
-
-        await prisma.user_sk.updateMany({
-          where: { sk_id: id },
-          data: { updatedAt },
-        });
-
-        return result;
+        },
+        include: {
+          sk_tidak_mampu: true,
+        },
       });
 
       return {

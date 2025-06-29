@@ -12,6 +12,18 @@ export const SkMyList = createElysia()
       orderBy: {
         createdAt: "desc",
       },
+      include: {
+        sk_kematian: {
+          select: {
+            name: true,
+          },
+        },
+        sk_tidak_mampu: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     return {

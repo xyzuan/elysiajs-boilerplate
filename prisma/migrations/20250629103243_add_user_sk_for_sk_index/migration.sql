@@ -22,7 +22,6 @@ CREATE TABLE `user_sk` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NULL,
 
-    INDEX `user_sk_user_id_sk_id_idx`(`user_id`, `sk_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
