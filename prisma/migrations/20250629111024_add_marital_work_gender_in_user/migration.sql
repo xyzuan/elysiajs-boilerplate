@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `user` ADD COLUMN `gender` ENUM('MALE', 'FEMALE') NULL,
+    ADD COLUMN `marital_status` ENUM('SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED', 'SEPARATED', 'SIRI') NULL,
+    ADD COLUMN `work` VARCHAR(191) NULL;

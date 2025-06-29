@@ -30,22 +30,39 @@ enum SKType {
   KEMATIAN
 }
 
-model user {
-  id           String    @id @default(uuid())
-  name         String    @db.VarChar(60)
-  email        String    @unique
-  password     String
-  role         UserRole? @default(USER)
-  born_birth   DateTime?
-  born_place   String?
-  nik          String?   @unique
-  religion     String?
-  address      String?
-  refreshToken String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime? @updatedAt
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+  SEPARATED
+  SIRI
+}
 
-  user_sks     user_sk[]
+enum Gender {
+  MALE
+  FEMALE
+}
+
+model user {
+  id             String    @id @default(uuid())
+  name           String    @db.VarChar(60)
+  email          String    @unique
+  password       String
+  role           UserRole? @default(USER)
+  born_birth     DateTime?
+  born_place     String?
+  gender         Gender?
+  work           String?
+  marital_status MaritalStatus?
+  nik            String?   @unique
+  religion       String?
+  address        String?
+  refreshToken   String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+
+  user_sks       user_sk[]
 }
 
 model user_sk {
@@ -75,4 +92,20 @@ model sk_kematian {
   death_reason String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
+}
+
+model sk_tidak_mampu {
+  id             String    @id @default(cuid())
+  name           String
+  born_birth     DateTime
+  born_place     String
+  gender         Gender
+  nik            String
+  religion       String
+  address        String
+  reason         String
+  work           String
+  marital_status MaritalStatus
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
 }
