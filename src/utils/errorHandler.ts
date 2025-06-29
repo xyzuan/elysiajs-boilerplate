@@ -12,6 +12,7 @@ import {
   ServiceUnavailableException,
   UnauthorizedException,
 } from "@constants/exceptions";
+import logger from "@libs/logger";
 
 /**
  * 400 - Bad Request
@@ -49,6 +50,7 @@ import {
  */
 
 const error = new Elysia()
+  .use(logger)
   .error({
     BadGatewayException,
     BadRequestException,

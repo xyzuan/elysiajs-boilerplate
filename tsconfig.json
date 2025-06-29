@@ -9,7 +9,8 @@
       "@controller/*": ["./src/api/controller/*"],
       "@utils/*": ["./src/utils/*"],
       "@libs/*": ["./src/libs/*"],
-      "@t/*": ["./src/types/*"]
+      "@t/*": ["./src/types/*"],
+      "@middlewares/*": ["./src/middlewares/*"]
     },
     "types": ["bun-types"],
     "esModuleInterop": true,
