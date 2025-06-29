@@ -1,1 +1,1 @@
-export { SkKematianController } from "./sk-kematian.controller";
+export { SkTidakMampuController } from "./sk-tidak-mampu.controller";

@@ -2,15 +2,16 @@ import { NotFoundException } from "@constants/exceptions";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
 import { authJwt } from "@middlewares/jwt";
-import skKematianSchema from "./sk-kematian.schema";
+import { Gender, MaritalStatus } from "@prisma/client";
+import skTidakMampuSchema from "./sk-tidak-mampu.schema";
 
-export const SkKematianController = createElysia({
-  prefix: "kematian",
+export const SkTidakMampuController = createElysia({
+  prefix: "tidak-mampu",
 })
   .use(authJwt)
-  .use(skKematianSchema)
+  .use(skTidakMampuSchema)
   .get(":id", async ({ params: { id } }) => {
-    const result = await prismaClient.sk_kematian.findUnique({
+    const result = await prismaClient.sk_tidak_mampu.findUnique({
       where: {
         id,
       },
@@ -29,21 +30,23 @@ export const SkKematianController = createElysia({
     "",
     async ({ user, body }) => {
       const result = await prismaClient.$transaction(async (prisma) => {
-        const skKematian = await prisma.sk_kematian.create({
+        const result = await prisma.sk_tidak_mampu.create({
           data: {
             ...body,
+            gender: body.gender as Gender,
+            marital_status: body.marital_status as MaritalStatus,
           },
         });
 
         await prisma.user_sk.create({
           data: {
             user_id: user.id,
-            sk_id: skKematian.id,
-            sk_type: "KEMATIAN",
+            sk_id: result.id,
+            sk_type: "TIDAK_MAMPU",
           },
         });
 
-        return skKematian;
+        return result;
       });
 
       return {
@@ -52,17 +55,30 @@ export const SkKematianController = createElysia({
       };
     },
     {
-      body: "sk-kematian",
+      body: "sk-tidak-mampu",
     }
   )
   .put(
     ":id",
     async ({ params: { id }, body }) => {
+      const existingRecord = await prismaClient.sk_tidak_mampu.findUnique({
+        where: { id },
+      });
+
+      if (!existingRecord) {
+        throw new NotFoundException("SK Tidak Mampu record not found");
+      }
+
       const result = await prismaClient.$transaction(async (prisma) => {
         const updatedAt = new Date();
-        const result = await prisma.sk_kematian.update({
+        const result = await prisma.sk_tidak_mampu.update({
           where: { id },
-          data: { ...body, updatedAt },
+          data: {
+            ...body,
+            gender: body.gender as Gender,
+            marital_status: body.marital_status as MaritalStatus,
+            updatedAt,
+          },
         });
 
         if (!result) {
@@ -83,6 +99,6 @@ export const SkKematianController = createElysia({
       };
     },
     {
-      body: "sk-kematian",
+      body: "sk-tidak-mampu",
     }
   );
