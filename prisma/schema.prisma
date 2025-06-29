@@ -28,6 +28,7 @@ enum SKStatus {
 
 enum SKType {
   KEMATIAN
+  TIDAK_MAMPU
 }
 
 enum MaritalStatus {
