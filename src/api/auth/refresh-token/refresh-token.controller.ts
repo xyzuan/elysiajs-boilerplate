@@ -6,14 +6,12 @@ import { getExpTimestamp } from "@utils/jwt";
 
 export const RefreshTokenController = createElysia().post(
   "/refresh-token",
-  async ({ cookie: { accessToken, refreshToken }, jwt, set }) => {
+  async ({ cookie: { accessToken, refreshToken }, jwt }) => {
     if (!refreshToken.value) {
-      set.status = "Unauthorized";
       throw new BadRequestException("Refresh token is missing");
     }
     const jwtPayload = await jwt.verify(refreshToken.value);
     if (!jwtPayload) {
-      set.status = "Forbidden";
       throw new ForbiddenException("Refresh token is invalid");
     }
     const userId = jwtPayload.sub;
@@ -23,7 +21,6 @@ export const RefreshTokenController = createElysia().post(
       },
     });
     if (!user) {
-      set.status = "Forbidden";
       throw new ForbiddenException("Refresh token is invalid");
     }
     const accessJWTToken = await jwt.sign({

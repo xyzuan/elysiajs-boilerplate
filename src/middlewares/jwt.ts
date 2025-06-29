@@ -1,5 +1,5 @@
-import { JWT_NAME, JWT_SECRET } from "@constants/jwt";
-import jwt from "@elysiajs/jwt";
+import { JWT_SECRET } from "@constants/jwt";
+import { jwt } from "@elysiajs/jwt";
 import { prismaClient } from "@libs/prisma";
 import Elysia from "elysia";
 
@@ -7,11 +7,10 @@ const authJwt = (app: Elysia) =>
   app
     .use(
       jwt({
-        name: JWT_NAME,
         secret: JWT_SECRET,
       })
     )
-    .derive(async ({ jwt, cookie: { accessToken }, set }) => {
+    .derive(async ({ cookie: { accessToken }, set, jwt }) => {
       if (!accessToken.value) {
         set.status = "Unauthorized";
         throw new Error("Access token is missing");

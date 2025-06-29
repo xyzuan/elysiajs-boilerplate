@@ -1,7 +1,4 @@
-import {
-  BadRequestException,
-  InternalServerErrorException,
-} from "@constants/exceptions";
+import { BadRequestException } from "@constants/exceptions";
 import { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } from "@constants/jwt";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
@@ -12,7 +9,7 @@ export const SignInController = createElysia()
   .use(signInSchema)
   .post(
     "/sign-in",
-    async ({ body, jwt, cookie: { accessToken, refreshToken }, set }) => {
+    async ({ body, jwt, cookie: { accessToken, refreshToken } }) => {
       try {
         const user = await prismaClient.user.findUnique({
           where: { email: body.email },

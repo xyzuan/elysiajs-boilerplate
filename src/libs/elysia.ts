@@ -1,6 +1,6 @@
-import { JWT_NAME, JWT_SECRET } from "@constants/jwt";
+import { JWT_SECRET } from "@constants/jwt";
 import cors from "@elysiajs/cors";
-import jwt from "@elysiajs/jwt";
+import { jwt } from "@elysiajs/jwt";
 import { env } from "@libs/env";
 import { error } from "@utils/errorHandler";
 import { Elysia, type ElysiaConfig } from "elysia";
@@ -21,7 +21,6 @@ const baseElysia = <
     .use(env)
     .use(
       jwt({
-        name: JWT_NAME,
         secret: JWT_SECRET,
       })
     )
@@ -30,4 +29,4 @@ const baseElysia = <
 const createElysia = (config?: Parameters<typeof baseElysia>[0]) =>
   new Elysia(config) as ReturnType<typeof baseElysia>;
 
-export { createElysia, baseElysia };
+export { baseElysia, createElysia };
