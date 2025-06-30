@@ -6,4 +6,11 @@ function getExpTimestamp(seconds: number) {
   return Math.floor(expirationTimeMillis / 1000);
 }
 
-export { getExpTimestamp };
+function getExpDateTime(seconds: number): Date {
+  const currentTimeMillis = Date.now();
+  const secondsIntoMillis = seconds * 1000;
+  const expirationTimeMillis = currentTimeMillis + secondsIntoMillis;
+  return new Date(expirationTimeMillis);
+}
+
+export { getExpTimestamp, getExpDateTime };

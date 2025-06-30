@@ -10,15 +10,15 @@ export const SignOutController = createElysia()
     async ({ user, cookie: { accessToken, refreshToken } }) => {
       accessToken.remove();
       refreshToken.remove();
-      await prismaClient.user.update({
+      await prismaClient.refresh_tokens.updateMany({
         where: {
-          id: user.id,
+          user_id: user.id,
+          token: refreshToken.value,
         },
         data: {
-          refreshToken: null,
+          isRevoked: true,
         },
       });
-
       return Responses.success(null);
     }
   );

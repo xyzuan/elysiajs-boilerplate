@@ -2,9 +2,10 @@ import { BadRequestException } from "@constants/exceptions";
 import { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } from "@constants/jwt";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
-import { getExpTimestamp } from "@utils/jwt";
+import { getExpDateTime, getExpTimestamp } from "@utils/jwt";
 import signInSchema from "./sign-in.schema";
 import { Responses } from "@constants/responses";
+import { randomUUIDv7 } from "bun";
 
 export const SignInController = createElysia()
   .use(signInSchema)
@@ -42,6 +43,8 @@ export const SignInController = createElysia()
         const accessJWTToken = await jwt.sign({
           sub: user.id,
           exp: getExpTimestamp(JWT_ACCESS_TOKEN_EXP),
+          jti: randomUUIDv7(),
+          type: "access",
         });
 
         accessToken.set({
@@ -54,6 +57,8 @@ export const SignInController = createElysia()
         const refreshJWTToken = await jwt.sign({
           sub: user.id,
           exp: getExpTimestamp(JWT_REFRESH_TOKEN_EXP),
+          jti: randomUUIDv7(),
+          type: "refresh",
         });
 
         refreshToken.set({
@@ -63,18 +68,17 @@ export const SignInController = createElysia()
           path: "/",
         });
 
-        const updatedUser = await prismaClient.user.update({
-          where: {
-            id: user.id,
-          },
+        await prismaClient.refresh_tokens.create({
           data: {
-            refreshToken: refreshJWTToken,
+            user_id: user.id,
+            token: refreshJWTToken,
+            expiredAt: getExpDateTime(JWT_REFRESH_TOKEN_EXP),
           },
         });
 
         return Responses.success({
           accessToken: accessJWTToken,
-          refreshToken: updatedUser.refreshToken,
+          refreshToken: refreshJWTToken,
         });
       } catch (error) {
         throw error;

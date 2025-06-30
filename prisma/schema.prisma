@@ -60,11 +60,22 @@ model user {
   nik            String?        @unique
   religion       String?
   address        String?
-  refreshToken   String?
   createdAt      DateTime       @default(now())
   updatedAt      DateTime?      @updatedAt
 
-  user_sks user_sk[]
+  user_sks       user_sk[]
+  refresh_tokens refresh_tokens[]
+}
+
+model refresh_tokens {
+  id             String         @id @default(cuid())
+  user_id        String
+  token          String         @db.VarChar(1024)
+  isRevoked      Boolean        @default(false)
+  expiredAt      DateTime
+  createdAt      DateTime       @default(now())
+
+  user           user           @relation(fields: [user_id], references: [id])
 }
 
 model user_sk {
