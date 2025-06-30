@@ -1,4 +1,3 @@
-// Import necessary modules as ES modules
 import { ISkTidakMampu } from "@api/surat-keterangan/v1/sk-tidak-mampu/sk-tidak-mampu.interfaces";
 import Docxtemplater from "docxtemplater";
 import fs from "fs";
