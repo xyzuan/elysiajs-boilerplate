@@ -3,6 +3,7 @@ import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
 import { authJwt } from "@middlewares/jwt";
 import skKematianSchema from "./sk-kematian.schema";
+import { Responses } from "@constants/responses";
 
 export const SkKematianController = createElysia({
   prefix: "kematian",
@@ -24,10 +25,7 @@ export const SkKematianController = createElysia({
       throw new NotFoundException();
     }
 
-    return {
-      status: "SUCCESS",
-      data: result,
-    };
+    return Responses.success(result);
   })
   .post(
     "",
@@ -44,10 +42,7 @@ export const SkKematianController = createElysia({
         },
       });
 
-      return {
-        status: "SUCCESS",
-        data: result,
-      };
+      return Responses.success(result);
     },
     {
       body: "sk-kematian",
@@ -80,10 +75,7 @@ export const SkKematianController = createElysia({
           sk_kematian: true,
         },
       });
-      return {
-        status: "SUCCESS",
-        data: result,
-      };
+      return Responses.success(result);
     },
     {
       body: "sk-kematian",

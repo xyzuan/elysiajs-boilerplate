@@ -4,6 +4,7 @@ import { prismaClient } from "@libs/prisma";
 import { authJwt } from "@middlewares/jwt";
 import { Gender, MaritalStatus } from "@prisma/client";
 import skTidakMampuSchema from "./sk-tidak-mampu.schema";
+import { Responses } from "@constants/responses";
 
 export const SkTidakMampuController = createElysia({
   prefix: "tidak-mampu",
@@ -25,10 +26,7 @@ export const SkTidakMampuController = createElysia({
       throw new NotFoundException();
     }
 
-    return {
-      status: "SUCCESS",
-      data: result,
-    };
+    return Responses.success(result);
   })
   .post(
     "",
@@ -47,10 +45,7 @@ export const SkTidakMampuController = createElysia({
         },
       });
 
-      return {
-        status: "SUCCESS",
-        data: result,
-      };
+      return Responses.success(result);
     },
     {
       body: "sk-tidak-mampu",
@@ -86,10 +81,7 @@ export const SkTidakMampuController = createElysia({
         },
       });
 
-      return {
-        status: "SUCCESS",
-        data: result,
-      };
+      return Responses.success(result);
     },
     {
       body: "sk-tidak-mampu",

@@ -1,6 +1,7 @@
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
 import signUpSchema from "./sign-up.schema";
+import { Responses } from "@constants/responses";
 
 export const SignUpController = createElysia()
   .use(signUpSchema)
@@ -17,10 +18,7 @@ export const SignUpController = createElysia()
             }),
           },
         });
-
-        return {
-          message: "User signed up successfully",
-        };
+        return Responses.success(null);
       } catch (error) {
         throw error;
       }

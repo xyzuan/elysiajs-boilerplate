@@ -1,3 +1,4 @@
+import { Responses } from "@constants/responses";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
 import { authJwt } from "@middlewares/jwt";
@@ -17,8 +18,7 @@ export const SignOutController = createElysia()
           refreshToken: null,
         },
       });
-      return {
-        message: "User logged out successfully",
-      };
+
+      return Responses.success(null);
     }
   );

@@ -1,3 +1,4 @@
+import { Responses } from "@constants/responses";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
 import { authJwt } from "@middlewares/jwt";
@@ -35,13 +36,10 @@ export const skStatusCountController = createElysia({
       },
     });
 
-    return {
-      status: "SUCCESS",
-      data: {
-        verify: skVerify,
-        approved: skApproved,
-        rejected: skRejected,
-        revised: skRevised,
-      },
-    };
+    return Responses.success({
+      verify: skVerify,
+      approved: skApproved,
+      rejected: skRejected,
+      revised: skRevised,
+    });
   });

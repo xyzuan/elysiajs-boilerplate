@@ -1,5 +1,6 @@
 import { BadRequestException, ForbiddenException } from "@constants/exceptions";
 import { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } from "@constants/jwt";
+import { Responses } from "@constants/responses";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
 import { getExpTimestamp } from "@utils/jwt";
@@ -52,8 +53,7 @@ export const RefreshTokenController = createElysia().post(
         refreshToken: refreshJWTToken,
       },
     });
-    return {
-      message: "User token refreshed successfully",
-    };
+
+    return Responses.success(null);
   }
 );

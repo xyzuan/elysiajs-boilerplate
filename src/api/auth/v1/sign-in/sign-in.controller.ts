@@ -4,6 +4,7 @@ import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
 import { getExpTimestamp } from "@utils/jwt";
 import signInSchema from "./sign-in.schema";
+import { Responses } from "@constants/responses";
 
 export const SignInController = createElysia()
   .use(signInSchema)
@@ -71,13 +72,10 @@ export const SignInController = createElysia()
           },
         });
 
-        return {
-          message: "User signed in successfully",
-          data: {
-            accessToken: accessJWTToken,
-            refreshToken: updatedUser.refreshToken,
-          },
-        };
+        return Responses.success({
+          accessToken: accessJWTToken,
+          refreshToken: updatedUser.refreshToken,
+        });
       } catch (error) {
         throw error;
       }
