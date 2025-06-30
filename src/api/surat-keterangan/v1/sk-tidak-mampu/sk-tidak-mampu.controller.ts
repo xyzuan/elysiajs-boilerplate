@@ -2,15 +2,68 @@ import { NotFoundException } from "@constants/exceptions";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
 import { authJwt } from "@middlewares/jwt";
-import { Gender, MaritalStatus } from "@prisma/client";
+import { Gender, MaritalStatus, SKType } from "@prisma/client";
 import skTidakMampuSchema from "./sk-tidak-mampu.schema";
 import { Responses } from "@constants/responses";
+import { parseQuery } from "@utils/queryHandler";
+import { IParams } from "@interfaces/params.interface";
 
 export const SkTidakMampuController = createElysia({
   prefix: "tidak-mampu",
 })
   .use(authJwt)
   .use(skTidakMampuSchema)
+  .get("", async ({ user, query }) => {
+    const {
+      search = "",
+      limit = 10,
+      page = 1,
+      ...q
+    } = parseQuery(query as IParams);
+
+    const where = {
+      user_id: user.id,
+      createdAt: {
+        gte: q.fromDate ? new Date(q.fromDate) : undefined,
+        lte: q.toDate ? new Date(q.toDate) : undefined,
+      },
+      sk_type: SKType.TIDAK_MAMPU,
+      OR: search
+        ? [
+            {
+              sk_tidak_mampu: {
+                name: {
+                  contains: search,
+                },
+              },
+            },
+          ]
+        : undefined,
+    };
+
+    const totalData = Math.ceil(
+      (await prismaClient.user_sk.count({
+        where,
+      })) / limit
+    );
+
+    const result = await prismaClient.user_sk.findMany({
+      where,
+      take: limit,
+      skip: (page - 1) * limit,
+      include: {
+        sk_tidak_mampu: {
+          select: {
+            id: true,
+            name: true,
+            address: true,
+          },
+        },
+      },
+    });
+
+    return Responses.paginated(result, page, limit, totalData);
+  })
   .get(":id", async ({ params: { id }, user }) => {
     const result = await prismaClient.user_sk.findUnique({
       where: {
