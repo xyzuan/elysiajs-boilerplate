@@ -97,11 +97,12 @@ model sk_kematian {
   born_birth   DateTime
   born_place   String
   nik          String
+  gender       Gender
   religion     String
   address      String
   death_date   DateTime
   death_place  String
-  death_reason String?
+  death_reason String
   createdAt    DateTime  @default(now())
   updatedAt    DateTime? @updatedAt
 

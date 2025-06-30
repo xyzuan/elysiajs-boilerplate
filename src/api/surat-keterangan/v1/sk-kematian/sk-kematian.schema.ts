@@ -9,6 +9,9 @@ const skKematianSchema = new Elysia().model({
       minLength: 16,
       maxLength: 16,
     }),
+    gender: t.String({
+      enum: ["MALE", "FEMALE"],
+    }),
     religion: t.String(),
     address: t.String(),
     death_date: t.Date(),
