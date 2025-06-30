@@ -10,7 +10,8 @@
       "@utils/*": ["./src/utils/*"],
       "@libs/*": ["./src/libs/*"],
       "@middlewares/*": ["./src/middlewares/*"],
-      "@interfaces/*": ["./src/interfaces/*"]
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@documents/*": ["./src/documents/*"]
     },
     "types": ["bun-types"],
     "esModuleInterop": true,

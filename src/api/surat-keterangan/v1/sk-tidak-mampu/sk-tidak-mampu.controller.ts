@@ -1,12 +1,13 @@
 import { NotFoundException } from "@constants/exceptions";
+import { Responses } from "@constants/responses";
+import { generateSkTidakMampuDocument } from "@documents/sk-tidak-mampu.docs";
+import { IParams } from "@interfaces/params.interface";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
 import { authJwt } from "@middlewares/jwt";
 import { Gender, MaritalStatus, SKType } from "@prisma/client";
-import skTidakMampuSchema from "./sk-tidak-mampu.schema";
-import { Responses } from "@constants/responses";
 import { parseQuery } from "@utils/queryHandler";
-import { IParams } from "@interfaces/params.interface";
+import skTidakMampuSchema from "./sk-tidak-mampu.schema";
 
 export const SkTidakMampuController = createElysia({
   prefix: "tidak-mampu",
@@ -139,4 +140,38 @@ export const SkTidakMampuController = createElysia({
     {
       body: "sk-tidak-mampu",
     }
-  );
+  )
+  .get(":id/download", async ({ params: { id }, user, set }) => {
+    const result = await prismaClient.user_sk.findUnique({
+      where: {
+        id,
+        user_id: user.id,
+      },
+      include: {
+        sk_tidak_mampu: true,
+      },
+    });
+
+    if (!result || !result.sk_tidak_mampu) {
+      throw new NotFoundException("SK Tidak Mampu not found");
+    }
+
+    set.headers["Content-Type"] =
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    set.headers[
+      "Content-Disposition"
+    ] = `attachment; filename="document_${id}.docx"`;
+
+    return generateSkTidakMampuDocument({
+      address: result.sk_tidak_mampu?.address,
+      born_birth: result.sk_tidak_mampu?.born_birth,
+      born_place: result.sk_tidak_mampu?.born_place,
+      gender: result.sk_tidak_mampu?.gender,
+      marital_status: result.sk_tidak_mampu?.marital_status,
+      name: result.sk_tidak_mampu?.name,
+      nik: result.sk_tidak_mampu?.nik,
+      religion: result.sk_tidak_mampu?.religion,
+      reason: result.sk_tidak_mampu?.reason,
+      work: result.sk_tidak_mampu?.work,
+    });
+  });
