@@ -1,18 +1,19 @@
 import { NotFoundException } from "@constants/exceptions";
 import { Responses } from "@constants/responses";
+import { generateSkKematianDocument } from "@documents/sk-kematian";
 import { IParams } from "@interfaces/params.interface";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
-import { authJwt } from "@middlewares/jwt";
-import { parseQuery } from "@utils/queryHandler";
-import skKematianSchema from "./sk-kematian.schema";
+import rbac from "@middlewares/rbac";
 import { Gender, SKType } from "@prisma/client";
-import { generateSkKematianDocument } from "@documents/sk-kematian";
+import { parseQuery } from "@utils/queryHandler";
+import Elysia from "elysia";
+import skKematianSchema from "./sk-kematian.schema";
 
 export const SkKematianController = createElysia({
   prefix: "kematian",
 })
-  .use(authJwt)
+  .use((app: Elysia) => rbac(app, "VIEW_SK"))
   .use(skKematianSchema)
   .get("", async ({ user, query }) => {
     const {
@@ -83,6 +84,7 @@ export const SkKematianController = createElysia({
 
     return Responses.success(result);
   })
+  .use((app: Elysia) => rbac(app, "REQUEST_SK"))
   .post(
     "",
     async ({ user, body }) => {

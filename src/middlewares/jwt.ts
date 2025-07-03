@@ -27,6 +27,10 @@ const authJwt = (app: Elysia) =>
         where: {
           id: userId,
         },
+        include: {
+          user_permissions: true,
+          user_roles: true,
+        },
       });
 
       if (!user) {

@@ -1,12 +1,13 @@
 import { Responses } from "@constants/responses";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
-import { authJwt } from "@middlewares/jwt";
+import rbac from "@middlewares/rbac";
+import Elysia from "elysia";
 
 export const skStatusCountController = createElysia({
   prefix: "sk-status-count",
 })
-  .use(authJwt)
+  .use((app: Elysia) => rbac(app, "VIEW_SK"))
   .get("", async ({ user }) => {
     const skVerify = await prismaClient.user_sk.count({
       where: {

@@ -15,11 +15,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  USER
-  ADMIN
-}
-
 enum SKStatus {
   VERIFY
   APPROVED
@@ -51,7 +46,6 @@ model user {
   name           String         @db.VarChar(60)
   email          String         @unique
   password       String
-  role           UserRole?      @default(USER)
   born_birth     DateTime?
   born_place     String?
   gender         Gender?
@@ -65,6 +59,65 @@ model user {
 
   user_sks       user_sk[]
   refresh_tokens refresh_tokens[]
+  user_roles     user_has_roles[]
+  user_permissions user_has_permissions[]
+}
+
+model roles {
+  id          String             @id @default(cuid())
+  name        String             @unique
+  created_at  DateTime           @default(now())
+  updated_at  DateTime?          @updatedAt
+  deleted_at  DateTime?
+
+  user_roles  user_has_roles[]
+  permissions role_has_permissions[]
+}
+
+model user_has_roles {
+  id        String @id @default(cuid())
+  user_id   String
+  role_id   String
+  created_at DateTime @default(now())
+  updated_at DateTime? @updatedAt
+
+  user user @relation(fields: [user_id], references: [id])
+  role roles @relation(fields: [role_id], references: [id])
+}
+
+model permissions {
+  id                 String                @id @default(cuid())
+  name               String                @unique
+  created_at         DateTime              @default(now())
+  updated_at         DateTime?             @updatedAt
+  deleted_at         DateTime?
+
+  role_permissions role_has_permissions[]
+  user_permissions user_has_permissions[]
+}
+
+model role_has_permissions {
+  id            String      @id @default(cuid())
+  role_id       String
+  permission_id String
+  created_at    DateTime    @default(now())
+  updated_at    DateTime?   @updatedAt
+  deleted_at    DateTime?
+
+  role       roles       @relation(fields: [role_id], references: [id])
+  permission permissions @relation(fields: [permission_id], references: [id])
+}
+
+model user_has_permissions {
+  id            String      @id @default(cuid())
+  user_id       String
+  permission_id String
+  created_at    DateTime    @default(now())
+  updated_at    DateTime?   @updatedAt
+  deleted_at    DateTime?
+
+  user       user       @relation(fields: [user_id], references: [id])
+  permission permissions @relation(fields: [permission_id], references: [id])
 }
 
 model refresh_tokens {

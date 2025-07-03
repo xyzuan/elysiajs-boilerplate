@@ -2,12 +2,13 @@ import { Responses } from "@constants/responses";
 import { IParams } from "@interfaces/params.interface";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
-import { authJwt } from "@middlewares/jwt";
+import rbac from "@middlewares/rbac";
 import { SKType } from "@prisma/client";
 import { parseQuery } from "@utils/queryHandler";
+import Elysia from "elysia";
 
 export const SkMyList = createElysia()
-  .use(authJwt)
+  .use((app: Elysia) => rbac(app, "VIEW_SK"))
   .get("/my-list", async ({ user, query }) => {
     const {
       search = "",

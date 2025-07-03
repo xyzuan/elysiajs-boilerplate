@@ -4,15 +4,16 @@ import { generateSkTidakMampuDocument } from "@documents/sk-tidak-mampu.docs";
 import { IParams } from "@interfaces/params.interface";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
-import { authJwt } from "@middlewares/jwt";
+import rbac from "@middlewares/rbac";
 import { Gender, MaritalStatus, SKType } from "@prisma/client";
 import { parseQuery } from "@utils/queryHandler";
 import skTidakMampuSchema from "./sk-tidak-mampu.schema";
+import Elysia from "elysia";
 
 export const SkTidakMampuController = createElysia({
   prefix: "tidak-mampu",
 })
-  .use(authJwt)
+  .use((app: Elysia) => rbac(app, "VIEW_SK"))
   .use(skTidakMampuSchema)
   .get("", async ({ user, query }) => {
     const {
@@ -82,6 +83,7 @@ export const SkTidakMampuController = createElysia({
 
     return Responses.success(result);
   })
+  .use((app: Elysia) => rbac(app, "REQUEST_SK"))
   .post(
     "",
     async ({ user, body }) => {
