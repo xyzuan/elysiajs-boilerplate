@@ -61,6 +61,7 @@ model user {
   refresh_tokens refresh_tokens[]
   user_roles     user_has_roles[]
   user_permissions user_has_permissions[]
+  user_sk_has_approver user_sk_has_approver[]
 }
 
 model roles {
@@ -135,13 +136,26 @@ model user_sk {
   id        String    @id @default(cuid())
   user_id   String
   sk_type   SKType
-  sk_status SKStatus  @default(VERIFY)
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
   user           user            @relation(fields: [user_id], references: [id])
   sk_kematian    sk_kematian?
   sk_tidak_mampu sk_tidak_mampu?
+  user_approvers user_sk_has_approver[]
+}
+
+model user_sk_has_approver {
+  id        String    @id @default(cuid())
+  user_sk_id String
+  user_approver_id String
+  status    SKStatus
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  user_sk   user_sk   @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
+  approver  user      @relation(fields: [user_approver_id], references: [id])
+  @@unique([user_sk_id, user_approver_id])
 }
 
 model sk_kematian {

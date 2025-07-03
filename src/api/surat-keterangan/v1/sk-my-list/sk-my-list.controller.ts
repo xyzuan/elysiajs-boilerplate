@@ -62,6 +62,7 @@ export const SkMyList = createElysia()
         createdAt: "desc",
       },
       include: {
+        user_approvers: true,
         sk_kematian: {
           select: {
             name: true,

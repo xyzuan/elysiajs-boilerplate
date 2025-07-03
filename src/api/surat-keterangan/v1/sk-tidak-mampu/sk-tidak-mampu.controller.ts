@@ -150,6 +150,7 @@ export const SkTidakMampuController = createElysia({
         user_id: user.id,
       },
       include: {
+        user_approvers: true,
         sk_tidak_mampu: true,
       },
     });
@@ -158,7 +159,10 @@ export const SkTidakMampuController = createElysia({
       throw new NotFoundException("SK not found");
     }
 
-    if (result.sk_status !== "APPROVED") {
+    if (
+      result.user_approvers.length === 0 ||
+      !result.user_approvers.some((approver) => approver.status === "APPROVED")
+    ) {
       throw new ForbiddenException(
         "SK is not approved yet. Please wait for approval."
       );

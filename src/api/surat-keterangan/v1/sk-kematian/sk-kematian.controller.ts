@@ -149,6 +149,7 @@ export const SkKematianController = createElysia({
       },
       include: {
         sk_kematian: true,
+        user_approvers: true,
       },
     });
 
@@ -156,7 +157,10 @@ export const SkKematianController = createElysia({
       throw new NotFoundException("SK not found");
     }
 
-    if (result.sk_status !== "APPROVED") {
+    if (
+      result.user_approvers.length === 0 ||
+      !result.user_approvers.some((approver) => approver.status === "APPROVED")
+    ) {
       throw new ForbiddenException(
         "SK is not approved yet. Please wait for approval."
       );
