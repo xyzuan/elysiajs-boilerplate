@@ -1,4 +1,4 @@
-import { NotFoundException } from "@constants/exceptions";
+import { ForbiddenException, NotFoundException } from "@constants/exceptions";
 import { Responses } from "@constants/responses";
 import { generateSkTidakMampuDocument } from "@documents/sk-tidak-mampu.docs";
 import { IParams } from "@interfaces/params.interface";
@@ -155,7 +155,13 @@ export const SkTidakMampuController = createElysia({
     });
 
     if (!result || !result.sk_tidak_mampu) {
-      throw new NotFoundException("SK Tidak Mampu not found");
+      throw new NotFoundException("SK not found");
+    }
+
+    if (result.sk_status !== "APPROVED") {
+      throw new ForbiddenException(
+        "SK is not approved yet. Please wait for approval."
+      );
     }
 
     set.headers["Content-Type"] =

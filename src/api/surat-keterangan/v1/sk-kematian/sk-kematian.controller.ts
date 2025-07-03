@@ -1,4 +1,4 @@
-import { NotFoundException } from "@constants/exceptions";
+import { ForbiddenException, NotFoundException } from "@constants/exceptions";
 import { Responses } from "@constants/responses";
 import { generateSkKematianDocument } from "@documents/sk-kematian";
 import { IParams } from "@interfaces/params.interface";
@@ -153,7 +153,13 @@ export const SkKematianController = createElysia({
     });
 
     if (!result || !result.sk_kematian) {
-      throw new NotFoundException("SK Kematian not found");
+      throw new NotFoundException("SK not found");
+    }
+
+    if (result.sk_status !== "APPROVED") {
+      throw new ForbiddenException(
+        "SK is not approved yet. Please wait for approval."
+      );
     }
 
     set.headers["Content-Type"] =
