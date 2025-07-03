@@ -1,4 +1,4 @@
-const JWT_ACCESS_TOKEN_EXP = 5 * 60;
+const JWT_ACCESS_TOKEN_EXP = 30 * 60;
 const JWT_REFRESH_TOKEN_EXP = 7 * 86400;
 const JWT_NAME = "jwt";
 const JWT_SECRET = Bun.env.JWT_SECRET ?? "SECRET_KEY";
