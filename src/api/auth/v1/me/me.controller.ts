@@ -11,6 +11,23 @@ export const MeController = createElysia()
       name: user.name,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
-      role: user.role,
+      role: user.user_roles.map((userRole) => ({
+        id: userRole.role.id,
+        name: userRole.role.name,
+      })),
+      permissions: Array.from(
+        new Map([
+          ...user.user_roles
+            .flatMap((roles) => roles.role.permissions)
+            .map((permissions) => [
+              permissions.permission.id,
+              permissions.permission,
+            ]),
+          ...user.user_permissions.map((userPermission) => [
+            userPermission.permission.id,
+            userPermission.permission,
+          ]),
+        ] as [string, { id: string; name: string }][]).values()
+      ),
     });
   });

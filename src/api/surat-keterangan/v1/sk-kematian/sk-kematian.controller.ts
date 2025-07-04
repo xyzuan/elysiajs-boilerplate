@@ -54,6 +54,16 @@ export const SkKematianController = createElysia({
       take: limit,
       skip: (page - 1) * limit,
       include: {
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
         sk_kematian: {
           select: {
             id: true,
@@ -74,6 +84,26 @@ export const SkKematianController = createElysia({
         user_id: user.id,
       },
       include: {
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+                user_roles: {
+                  select: {
+                    role: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         sk_kematian: true,
       },
     });
@@ -112,10 +142,24 @@ export const SkKematianController = createElysia({
     async ({ params: { id }, user, body }) => {
       const existingRecord = await prismaClient.user_sk.findUnique({
         where: { id, sk_type: SKType.KEMATIAN, user_id: user.id },
+        include: {
+          user_approvers: true,
+        },
       });
 
       if (!existingRecord) {
         throw new NotFoundException("SK Kematian record not found");
+      }
+
+      if (
+        existingRecord.user_approvers.length === 0 ||
+        !existingRecord.user_approvers.some(
+          (approver) => approver.status === "REVISED"
+        )
+      ) {
+        throw new ForbiddenException(
+          "SK is not revised yet. Please wait for revised."
+        );
       }
 
       const result = await prismaClient.user_sk.update({

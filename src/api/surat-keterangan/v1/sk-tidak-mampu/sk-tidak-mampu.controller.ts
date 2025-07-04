@@ -7,8 +7,8 @@ import { prismaClient } from "@libs/prisma";
 import rbac from "@middlewares/rbac";
 import { Gender, MaritalStatus, SKType } from "@prisma/client";
 import { parseQuery } from "@utils/queryHandler";
-import skTidakMampuSchema from "./sk-tidak-mampu.schema";
 import Elysia from "elysia";
+import skTidakMampuSchema from "./sk-tidak-mampu.schema";
 
 export const SkTidakMampuController = createElysia({
   prefix: "tidak-mampu",
@@ -54,6 +54,16 @@ export const SkTidakMampuController = createElysia({
       take: limit,
       skip: (page - 1) * limit,
       include: {
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
         sk_tidak_mampu: {
           select: {
             id: true,
@@ -73,6 +83,26 @@ export const SkTidakMampuController = createElysia({
         user_id: user.id,
       },
       include: {
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+                user_roles: {
+                  select: {
+                    role: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         sk_tidak_mampu: true,
       },
     });
@@ -112,10 +142,24 @@ export const SkTidakMampuController = createElysia({
     async ({ params: { id }, body, user }) => {
       const existingRecord = await prismaClient.user_sk.findUnique({
         where: { id, sk_type: "TIDAK_MAMPU", user_id: user.id },
+        include: {
+          user_approvers: true,
+        },
       });
 
       if (!existingRecord) {
         throw new NotFoundException("SK Tidak Mampu record not found");
+      }
+
+      if (
+        existingRecord.user_approvers.length === 0 ||
+        !existingRecord.user_approvers.some(
+          (approver) => approver.status === "REVISED"
+        )
+      ) {
+        throw new ForbiddenException(
+          "SK is not revised yet. Please wait for revised."
+        );
       }
 
       const result = await prismaClient.user_sk.update({

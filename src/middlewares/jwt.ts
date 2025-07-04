@@ -28,8 +28,36 @@ const authJwt = (app: Elysia) =>
           id: userId,
         },
         include: {
-          user_permissions: true,
-          user_roles: true,
+          user_roles: {
+            include: {
+              role: {
+                select: {
+                  id: true,
+                  name: true,
+                  permissions: {
+                    select: {
+                      permission: {
+                        select: {
+                          id: true,
+                          name: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+          user_permissions: {
+            select: {
+              permission: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
         },
       });
 

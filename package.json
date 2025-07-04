@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts",
-    "seed-role-permission": "bun prisma/seeders/role_permission.seed.ts"
+    "seed-role-permission": "bun prisma/seeders/role_permission.seed.ts",
+    "seed-user": "bun prisma/seeders/user.seed.ts",
+    "seed-all": "bun prisma/seeders/seed-all.ts"
   },
   "author": {
     "name": "xyzuan",
