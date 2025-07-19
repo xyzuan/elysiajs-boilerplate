@@ -10,6 +10,14 @@ generator client {
   binaryTargets = ["native", "debian-openssl-3.0.x", "debian-openssl-1.1.x"]
 }
 
+generator prismabox {
+  provider                    = "prismabox"
+  typeboxImportDependencyName = "elysia"
+  typeboxImportVariableName   = "t"
+  inputModel                  = true
+  output                      = "../src/models"
+}
+
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -57,52 +65,52 @@ model user {
   createdAt      DateTime       @default(now())
   updatedAt      DateTime?      @updatedAt
 
-  user_sks       user_sk[]
-  refresh_tokens refresh_tokens[]
-  user_roles     user_has_roles[]
-  user_permissions user_has_permissions[]
+  user_sks             user_sk[]
+  refresh_tokens       refresh_tokens[]
+  user_roles           user_has_roles[]
+  user_permissions     user_has_permissions[]
   user_sk_has_approver user_sk_has_approver[]
 }
 
 model roles {
-  id          String             @id @default(cuid())
-  name        String             @unique
-  created_at  DateTime           @default(now())
-  updated_at  DateTime?          @updatedAt
-  deleted_at  DateTime?
+  id         String    @id @default(cuid())
+  name       String    @unique
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  deleted_at DateTime?
 
   user_roles  user_has_roles[]
   permissions role_has_permissions[]
 }
 
 model user_has_roles {
-  id        String @id @default(cuid())
-  user_id   String
-  role_id   String
-  created_at DateTime @default(now())
+  id         String    @id @default(cuid())
+  user_id    String
+  role_id    String
+  created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
-  user user @relation(fields: [user_id], references: [id])
+  user user  @relation(fields: [user_id], references: [id])
   role roles @relation(fields: [role_id], references: [id])
 }
 
 model permissions {
-  id                 String                @id @default(cuid())
-  name               String                @unique
-  created_at         DateTime              @default(now())
-  updated_at         DateTime?             @updatedAt
-  deleted_at         DateTime?
+  id         String    @id @default(cuid())
+  name       String    @unique
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+  deleted_at DateTime?
 
   role_permissions role_has_permissions[]
   user_permissions user_has_permissions[]
 }
 
 model role_has_permissions {
-  id            String      @id @default(cuid())
+  id            String    @id @default(cuid())
   role_id       String
   permission_id String
-  created_at    DateTime    @default(now())
-  updated_at    DateTime?   @updatedAt
+  created_at    DateTime  @default(now())
+  updated_at    DateTime? @updatedAt
   deleted_at    DateTime?
 
   role       roles       @relation(fields: [role_id], references: [id])
@@ -110,26 +118,26 @@ model role_has_permissions {
 }
 
 model user_has_permissions {
-  id            String      @id @default(cuid())
+  id            String    @id @default(cuid())
   user_id       String
   permission_id String
-  created_at    DateTime    @default(now())
-  updated_at    DateTime?   @updatedAt
+  created_at    DateTime  @default(now())
+  updated_at    DateTime? @updatedAt
   deleted_at    DateTime?
 
-  user       user       @relation(fields: [user_id], references: [id])
+  user       user        @relation(fields: [user_id], references: [id])
   permission permissions @relation(fields: [permission_id], references: [id])
 }
 
 model refresh_tokens {
-  id             String         @id @default(cuid())
-  user_id        String
-  token          String         @db.VarChar(1024)
-  isRevoked      Boolean        @default(false)
-  expiredAt      DateTime
-  createdAt      DateTime       @default(now())
+  id        String   @id @default(cuid())
+  user_id   String
+  token     String   @db.VarChar(1024)
+  isRevoked Boolean  @default(false)
+  expiredAt DateTime
+  createdAt DateTime @default(now())
 
-  user           user           @relation(fields: [user_id], references: [id])
+  user user @relation(fields: [user_id], references: [id])
 }
 
 model user_sk {
@@ -139,22 +147,23 @@ model user_sk {
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
 
-  user           user            @relation(fields: [user_id], references: [id])
+  user           user                   @relation(fields: [user_id], references: [id])
   sk_kematian    sk_kematian?
   sk_tidak_mampu sk_tidak_mampu?
   user_approvers user_sk_has_approver[]
 }
 
 model user_sk_has_approver {
-  id        String    @id @default(cuid())
-  user_sk_id String
+  id               String    @id @default(cuid())
+  user_sk_id       String
   user_approver_id String
-  status    SKStatus
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  status           SKStatus
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime? @updatedAt
 
-  user_sk   user_sk   @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
-  approver  user      @relation(fields: [user_approver_id], references: [id])
+  user_sk  user_sk @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
+  approver user    @relation(fields: [user_approver_id], references: [id])
+
   @@unique([user_sk_id, user_approver_id])
 }
 
