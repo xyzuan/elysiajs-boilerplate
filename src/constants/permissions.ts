@@ -6,6 +6,7 @@ const PERMISSIONS = {
   VIEW_SK: "VIEW_SK",
   REQUEST_SK: "REQUEST_SK",
   APPROVE_SK: "APPROVE_SK",
+  MANAGE_ROLES_PERMISSIONS: "MANAGE_ROLES_PERMISSIONS",
 } as const;
 
 export { PERMISSIONS as default, Permissions };
