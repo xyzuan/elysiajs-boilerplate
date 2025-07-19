@@ -12,7 +12,7 @@ import usersSchema from "./users.schema";
 export const usersController = createElysia({
   prefix: "users",
 })
-  .use((app: Elysia) => rbac(app, "MANAGE_ROLES_PERMISSIONS"))
+  .use((app: Elysia) => rbac(app, "MANAGE_USERS"))
   .use(usersSchema)
   .get("", async ({ query }) => {
     const { search = "", limit = 10, page = 1 } = parseQuery(query as IParams);

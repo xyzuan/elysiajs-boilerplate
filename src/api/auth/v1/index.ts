@@ -4,10 +4,12 @@ import { SignInController } from "./sign-in";
 import { SignOutController } from "./sign-out";
 import { RefreshTokenController } from "./refresh-token";
 import { MeController } from "./me";
+import { ChangePasswordController } from "./change-password";
 
 export const authV1 = createElysia()
   .use(SignUpController)
   .use(SignInController)
   .use(SignOutController)
   .use(RefreshTokenController)
-  .use(MeController);
+  .use(MeController)
+  .use(ChangePasswordController);

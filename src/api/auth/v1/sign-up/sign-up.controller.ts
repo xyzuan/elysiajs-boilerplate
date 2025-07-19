@@ -25,5 +25,5 @@ export const SignUpController = createElysia()
     },
     {
       body: "sign-up",
-    }
+    },
   );

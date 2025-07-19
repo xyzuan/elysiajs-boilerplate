@@ -31,11 +31,11 @@ const rbac = (app: Elysia, permission: Permissions) =>
     }
 
     const rolePermissions = userWithRolesAndPermissions.user_roles.flatMap(
-      (ur) => ur.role.permissions.map((rp) => rp.permission.name)
+      (ur) => ur.role.permissions.map((rp) => rp.permission.name),
     );
 
     const directPermissions = userWithRolesAndPermissions.user_permissions.map(
-      (up) => up.permission.name
+      (up) => up.permission.name,
     );
 
     const allPermissions = new Set([...rolePermissions, ...directPermissions]);
@@ -43,7 +43,7 @@ const rbac = (app: Elysia, permission: Permissions) =>
 
     if (!hasPermission) {
       throw new ForbiddenException(
-        "You do not have permission to access this resource"
+        "You do not have permission to access this resource",
       );
     }
 
