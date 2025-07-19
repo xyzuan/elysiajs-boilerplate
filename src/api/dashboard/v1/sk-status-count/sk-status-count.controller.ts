@@ -7,33 +7,58 @@ import Elysia from "elysia";
 export const skStatusCountController = createElysia({
   prefix: "sk-status-count",
 })
-  .use((app: Elysia) => rbac(app, "VIEW_SK"))
+  .use((app: Elysia) => rbac(app, "USER_DASHBOARD"))
   .get("", async ({ user }) => {
     const skVerify = await prismaClient.user_sk.count({
       where: {
         user_id: user.id,
-        sk_status: "VERIFY",
+        OR: [
+          {
+            user_approvers: {
+              none: {},
+            },
+          },
+          {
+            user_approvers: {
+              some: {
+                status: "VERIFY",
+              },
+            },
+          },
+        ],
       },
     });
 
     const skApproved = await prismaClient.user_sk.count({
       where: {
         user_id: user.id,
-        sk_status: "APPROVED",
+        user_approvers: {
+          some: {
+            status: "APPROVED",
+          },
+        },
       },
     });
 
     const skRejected = await prismaClient.user_sk.count({
       where: {
         user_id: user.id,
-        sk_status: "REJECTED",
+        user_approvers: {
+          some: {
+            status: "REJECTED",
+          },
+        },
       },
     });
 
     const skRevised = await prismaClient.user_sk.count({
       where: {
         user_id: user.id,
-        sk_status: "REVISED",
+        user_approvers: {
+          some: {
+            status: "REVISED",
+          },
+        },
       },
     });
 

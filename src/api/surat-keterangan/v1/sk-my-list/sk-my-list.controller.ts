@@ -8,7 +8,7 @@ import { parseQuery } from "@utils/queryHandler";
 import Elysia from "elysia";
 
 export const SkMyList = createElysia()
-  .use((app: Elysia) => rbac(app, "VIEW_SK"))
+  .use((app: Elysia) => rbac(app, "USER_DASHBOARD"))
   .get("/my-list", async ({ user, query }) => {
     const {
       search = "",

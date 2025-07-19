@@ -12,12 +12,6 @@ const baseElysia = <
   config?: ElysiaConfig<BasePath, Scoped>
 ) =>
   new Elysia(config)
-    .use(
-      cors({
-        origin: ["xyzuan.my.id", "localhost:3000", "localhost"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-      })
-    )
     .use(env)
     .use(
       jwt({

@@ -1,4 +1,7 @@
-import { BadRequestException, ForbiddenException } from "@constants/exceptions";
+import {
+  BadRequestException,
+  UnauthorizedException,
+} from "@constants/exceptions";
 import { JWT_ACCESS_TOKEN_EXP, JWT_REFRESH_TOKEN_EXP } from "@constants/jwt";
 import { Responses } from "@constants/responses";
 import { createElysia } from "@libs/elysia";
@@ -16,7 +19,9 @@ export const RefreshTokenController = createElysia().post(
     const jwtPayload = await jwt.verify(refreshToken.value);
 
     if (!jwtPayload) {
-      throw new ForbiddenException("Refresh token is invalid");
+      accessToken.remove();
+      refreshToken.remove();
+      throw new UnauthorizedException("Refresh token is invalid");
     }
 
     const userId = jwtPayload.sub;
@@ -27,7 +32,9 @@ export const RefreshTokenController = createElysia().post(
     });
 
     if (!user) {
-      throw new ForbiddenException("Refresh token is invalid");
+      accessToken.remove();
+      refreshToken.remove();
+      throw new UnauthorizedException("Refresh token is invalid");
     }
 
     const oldRefreshToken = refreshToken.value;
@@ -39,7 +46,9 @@ export const RefreshTokenController = createElysia().post(
     });
 
     if (existRefreshToken?.isRevoked) {
-      throw new ForbiddenException("Refresh token has been revoked");
+      accessToken.remove();
+      refreshToken.remove();
+      throw new UnauthorizedException("Refresh token has been revoked");
     }
 
     const accessJWTToken = await jwt.sign({

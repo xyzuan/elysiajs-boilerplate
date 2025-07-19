@@ -13,12 +13,10 @@ const authJwt = (app: Elysia) =>
     )
     .derive(async ({ cookie: { accessToken }, set, jwt }) => {
       if (!accessToken.value) {
-        set.status = "Unauthorized";
         throw new UnauthorizedException("Access token is missing");
       }
       const jwtPayload = await jwt.verify(accessToken.value);
       if (!jwtPayload) {
-        set.status = "Forbidden";
         throw new UnauthorizedException("Access token is invalid");
       }
 
@@ -62,7 +60,6 @@ const authJwt = (app: Elysia) =>
       });
 
       if (!user) {
-        set.status = "Forbidden";
         throw new UnauthorizedException("Access token is invalid");
       }
 

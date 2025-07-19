@@ -12,7 +12,10 @@ import {
   ServiceUnavailableException,
   UnauthorizedException,
 } from "@constants/exceptions";
-import logger from "@libs/logger";
+import { logger } from "@bogeychan/elysia-logger";
+import { opentelemetry } from "@elysiajs/opentelemetry";
+import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-node";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
 
 /**
  * 400 - Bad Request
@@ -50,7 +53,22 @@ import logger from "@libs/logger";
  */
 
 const error = new Elysia()
-  .use(logger)
+  .use(logger({}))
+  .use(
+    opentelemetry({
+      spanProcessors: [
+        new BatchSpanProcessor(
+          new OTLPTraceExporter({
+            url: "https://api.axiom.co/v1/traces",
+            headers: {
+              Authorization: `Bearer ${Bun.env.AXIOM_SECRET_TOKEN as string}`,
+              "X-Axiom-Dataset": Bun.env.AXIOM_DATASET as string,
+            },
+          })
+        ),
+      ],
+    })
+  )
   .error({
     BadGatewayException,
     BadRequestException,

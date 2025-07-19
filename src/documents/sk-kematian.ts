@@ -7,7 +7,7 @@ import PizZip from "pizzip";
 export const generateSkKematianDocument = async (data: ISkKematian) => {
   const inputPath = path.resolve(
     import.meta.dir,
-    "../assets/templates/sk-kematian.docx"
+    "../assets/templates/sk-kematian.docx",
   );
   const content = await fs.promises.readFile(inputPath, "binary");
   const zip = new PizZip(content);

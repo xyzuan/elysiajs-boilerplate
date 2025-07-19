@@ -82,6 +82,7 @@ export const SkKematianController = createElysia({
       where: {
         id,
         user_id: user.id,
+        sk_type: SKType.KEMATIAN,
       },
       include: {
         user_approvers: {

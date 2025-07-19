@@ -81,6 +81,7 @@ export const SkTidakMampuController = createElysia({
       where: {
         id,
         user_id: user.id,
+        sk_type: SKType.TIDAK_MAMPU,
       },
       include: {
         user_approvers: {
