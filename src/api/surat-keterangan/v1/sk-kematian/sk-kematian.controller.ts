@@ -138,7 +138,7 @@ export const SkKematianController = createElysia({
       body: "sk-kematian",
     }
   )
-  .put(
+  .patch(
     ":id",
     async ({ params: { id }, user, body }) => {
       const existingRecord = await prismaClient.user_sk.findUnique({
@@ -213,9 +213,8 @@ export const SkKematianController = createElysia({
 
     set.headers["Content-Type"] =
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    set.headers[
-      "Content-Disposition"
-    ] = `attachment; filename="document_${id}.docx"`;
+    set.headers["Content-Disposition"] =
+      `attachment; filename="document_${id}.docx"`;
 
     return generateSkKematianDocument({
       name: result.sk_kematian?.name,

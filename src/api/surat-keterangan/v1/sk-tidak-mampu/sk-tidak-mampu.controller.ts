@@ -138,7 +138,7 @@ export const SkTidakMampuController = createElysia({
       body: "sk-tidak-mampu",
     }
   )
-  .put(
+  .patch(
     ":id",
     async ({ params: { id }, body, user }) => {
       const existingRecord = await prismaClient.user_sk.findUnique({
@@ -215,9 +215,8 @@ export const SkTidakMampuController = createElysia({
 
     set.headers["Content-Type"] =
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    set.headers[
-      "Content-Disposition"
-    ] = `attachment; filename="document_${id}.docx"`;
+    set.headers["Content-Disposition"] =
+      `attachment; filename="document_${id}.docx"`;
 
     return generateSkTidakMampuDocument({
       address: result.sk_tidak_mampu?.address,
