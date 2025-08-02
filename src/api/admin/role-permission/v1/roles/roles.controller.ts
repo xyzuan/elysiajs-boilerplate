@@ -11,7 +11,6 @@ import rolesSchema from "./roles.schema";
 export const rolesController = createElysia({
   prefix: "roles",
 })
-  .use((app: Elysia) => rbac(app, "MANAGE_ROLES_PERMISSIONS"))
   .use(rolesSchema)
   .get("", async ({ query }) => {
     const { search = "", limit = 10, page = 1 } = parseQuery(query as IParams);
@@ -31,7 +30,7 @@ export const rolesController = createElysia({
     const totalData = Math.ceil(
       (await prismaClient.roles.count({
         where,
-      })) / limit
+      })) / limit,
     );
 
     const result = await prismaClient.roles.findMany({
@@ -45,6 +44,7 @@ export const rolesController = createElysia({
 
     return Responses.paginated(result, page, limit, totalData);
   })
+  .use((app: Elysia) => rbac(app, "MANAGE_ROLES_PERMISSIONS"))
   .post(
     "",
     async ({ body }) => {
@@ -77,7 +77,7 @@ export const rolesController = createElysia({
     },
     {
       body: "create-role",
-    }
+    },
   )
   .get(":id", async ({ params: { id } }) => {
     const result = await prismaClient.roles.findUnique({
@@ -124,7 +124,7 @@ export const rolesController = createElysia({
     },
     {
       body: "update-role",
-    }
+    },
   )
   .delete(":id", async ({ params: { id } }) => {
     // Check if role exists
@@ -143,7 +143,7 @@ export const rolesController = createElysia({
 
     if (usersWithRole) {
       throw new ConflictException(
-        "Cannot delete role that is assigned to users"
+        "Cannot delete role that is assigned to users",
       );
     }
 
