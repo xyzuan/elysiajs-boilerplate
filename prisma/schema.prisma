@@ -90,8 +90,8 @@ model user_has_roles {
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
-  user user  @relation(fields: [user_id], references: [id])
-  role roles @relation(fields: [role_id], references: [id])
+  user user  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  role roles @relation(fields: [role_id], references: [id], onDelete: Cascade)
 }
 
 model permissions {
@@ -113,8 +113,8 @@ model role_has_permissions {
   updated_at    DateTime? @updatedAt
   deleted_at    DateTime?
 
-  role       roles       @relation(fields: [role_id], references: [id])
-  permission permissions @relation(fields: [permission_id], references: [id])
+  role       roles       @relation(fields: [role_id], references: [id], onDelete: Cascade)
+  permission permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade)
 }
 
 model user_has_permissions {
@@ -125,8 +125,8 @@ model user_has_permissions {
   updated_at    DateTime? @updatedAt
   deleted_at    DateTime?
 
-  user       user        @relation(fields: [user_id], references: [id])
-  permission permissions @relation(fields: [permission_id], references: [id])
+  user       user        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  permission permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade)
 }
 
 model refresh_tokens {

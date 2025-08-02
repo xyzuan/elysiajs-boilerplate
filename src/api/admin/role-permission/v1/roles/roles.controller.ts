@@ -48,7 +48,6 @@ export const rolesController = createElysia({
   .post(
     "",
     async ({ body }) => {
-      // Check if role name already exists
       const existingRole = await prismaClient.roles.findUnique({
         where: { name: body.name },
       });
@@ -127,7 +126,6 @@ export const rolesController = createElysia({
     },
   )
   .delete(":id", async ({ params: { id } }) => {
-    // Check if role exists
     const existingRole = await prismaClient.roles.findUnique({
       where: { id },
     });
@@ -136,23 +134,6 @@ export const rolesController = createElysia({
       throw new NotFoundException("Role not found");
     }
 
-    // Check if role is being used by any users
-    const usersWithRole = await prismaClient.user_has_roles.findFirst({
-      where: { role_id: id },
-    });
-
-    if (usersWithRole) {
-      throw new ConflictException(
-        "Cannot delete role that is assigned to users",
-      );
-    }
-
-    // Delete role permissions first (cascade)
-    await prismaClient.role_has_permissions.deleteMany({
-      where: { role_id: id },
-    });
-
-    // Delete the role
     await prismaClient.roles.delete({
       where: { id },
     });
