@@ -1,3 +1,4 @@
+import { BadRequestException } from "@constants/exceptions";
 import { Responses } from "@constants/responses";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";
@@ -13,21 +14,33 @@ export const changeStatusSk = createElysia({
     const { id } = params;
     const { status } = body as { status: SKStatus };
 
-    await prismaClient.user_sk_has_approver.upsert({
+    const existingApprover = await prismaClient.user_sk_has_approver.findUnique(
+      {
+        where: {
+          user_sk_id_user_approver_id: {
+            user_sk_id: id,
+            user_approver_id: user.id,
+          },
+        },
+      }
+    );
+
+    if (!existingApprover) {
+      throw new BadRequestException(
+        "You are not assigned as an approver for this SK"
+      );
+    }
+
+    await prismaClient.user_sk_has_approver.update({
       where: {
         user_sk_id_user_approver_id: {
           user_sk_id: id,
           user_approver_id: user.id,
         },
       },
-      update: {
+      data: {
         status,
         updatedAt: new Date(),
-      },
-      create: {
-        user_sk_id: id,
-        user_approver_id: user.id,
-        status,
       },
     });
 
