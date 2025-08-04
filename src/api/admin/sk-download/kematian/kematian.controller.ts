@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  NotFoundException,
-} from "@constants/exceptions";
+import { BadRequestException, NotFoundException } from "@constants/exceptions";
 import { generateSkKematianDocument } from "@documents/sk-kematian";
 import { createElysia } from "@libs/elysia";
 import { prismaClient } from "@libs/prisma";

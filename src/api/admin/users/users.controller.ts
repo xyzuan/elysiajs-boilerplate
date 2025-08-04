@@ -37,7 +37,7 @@ export const usersController = createElysia({
     const totalData = Math.ceil(
       (await prismaClient.user.count({
         where,
-      })) / limit
+      })) / limit,
     );
 
     const result = await prismaClient.user.findMany({
@@ -214,5 +214,5 @@ export const usersController = createElysia({
     },
     {
       body: "update-user",
-    }
+    },
   );

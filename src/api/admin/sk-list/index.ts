@@ -1,4 +1,4 @@
 import { createElysia } from "@libs/elysia";
-import { skListController } from "./v1";
+import { skListController } from "./sk-list.controller";
 
-export const skListV1 = createElysia().use(skListController);
+export const skList = createElysia().use(skListController);

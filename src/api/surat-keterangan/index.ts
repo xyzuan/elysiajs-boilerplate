@@ -1,4 +1,8 @@
 import { createElysia } from "@libs/elysia";
-import { skV1 } from "./v1";
+import { SkKematianController } from "./sk-kematian";
+import { SkMyList } from "./sk-my-list";
+import { SkTidakMampuController } from "./sk-tidak-mampu";
 
-export default createElysia().group("/v1/sk", (api) => api.use(skV1));
+export default createElysia().group("/sk", (api) =>
+  api.use(SkMyList).use(SkKematianController).use(SkTidakMampuController),
+);

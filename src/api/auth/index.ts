@@ -1,4 +1,17 @@
 import { createElysia } from "@libs/elysia";
-import { authV1 } from "./v1";
+import { SignUpController } from "./sign-up";
+import { SignInController } from "./sign-in";
+import { SignOutController } from "./sign-out";
+import { RefreshTokenController } from "./refresh-token";
+import { MeController } from "./me";
+import { ChangePasswordController } from "./change-password";
 
-export default createElysia().group("/v1/auth", (api) => api.use(authV1));
+export default createElysia().group("/auth", (api) =>
+  api
+    .use(SignUpController)
+    .use(SignInController)
+    .use(SignOutController)
+    .use(RefreshTokenController)
+    .use(MeController)
+    .use(ChangePasswordController),
+);

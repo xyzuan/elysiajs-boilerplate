@@ -1,4 +1,4 @@
 import { createElysia } from "@libs/elysia";
-import { changeStatusSk } from "./v1/change-status-sk.controller";
+import { changeStatusSk } from "./change-status-sk.controller";
 
-export const changeStatusSkV1 = createElysia().use(changeStatusSk);
+export const changeStatusSkModule = createElysia().use(changeStatusSk);

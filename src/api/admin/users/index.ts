@@ -1,4 +1,4 @@
 import { createElysia } from "@libs/elysia";
-import { usersController } from "./v1";
+import { usersController } from "./users.controller";
 
-export const usersV1 = createElysia().use(usersController);
+export const users = createElysia().use(usersController);

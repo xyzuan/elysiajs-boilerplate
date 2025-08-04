@@ -1,4 +1,6 @@
 import { createElysia } from "@libs/elysia";
-import { skDownloadV1 } from "./v1";
+import { kematian } from "./kematian";
 
-export const skDownloadV1Export = createElysia().use(skDownloadV1);
+export const skDownload = createElysia({
+  prefix: "sk-download",
+}).use(kematian);
