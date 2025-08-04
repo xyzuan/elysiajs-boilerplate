@@ -42,6 +42,22 @@ async function createRoleHasPermissionEntries() {
   const wargaDesaRole = roles.find((role) => role.name === "Warga Desa");
   const kepalaDesaRole = roles.find((role) => role.name === "Kepala Desa");
   const staffDesaRole = roles.find((role) => role.name === "Staff Desa");
+
+  const viewUserDashboardPermission = permissions.find(
+    (permission) => permission.name === "USER_DASHBOARD"
+  );
+  const adminDashboardPermission = permissions.find(
+    (permission) => permission.name === "ADMIN_DASHBOARD"
+  );
+  const manageUsersPermission = permissions.find(
+    (permission) => permission.name === "MANAGE_USERS"
+  );
+  const manageRolesPermissionsPermission = permissions.find(
+    (permission) => permission.name === "MANAGE_ROLES_PERMISSIONS"
+  );
+  const manageSkApproversPermission = permissions.find(
+    (permission) => permission.name === "MANAGE_SK_APPROVERS"
+  );
   const viewSkPermission = permissions.find(
     (permission) => permission.name === "VIEW_SK"
   );
@@ -82,7 +98,12 @@ async function createRoleHasPermissionEntries() {
     });
   }
 
-  if (wargaDesaRole && viewSkPermission && requestSkPermission) {
+  if (
+    wargaDesaRole &&
+    viewSkPermission &&
+    requestSkPermission &&
+    viewUserDashboardPermission
+  ) {
     await prisma.role_has_permissions.create({
       data: {
         role_id: wargaDesaRole.id,
@@ -93,6 +114,12 @@ async function createRoleHasPermissionEntries() {
       data: {
         role_id: wargaDesaRole.id,
         permission_id: requestSkPermission.id,
+      },
+    });
+    await prisma.role_has_permissions.create({
+      data: {
+        role_id: wargaDesaRole.id,
+        permission_id: viewUserDashboardPermission.id,
       },
     });
   }

@@ -9,7 +9,7 @@ export const SignUpController = createElysia()
     "/sign-up",
     async ({ body }) => {
       try {
-        await prismaClient.user.create({
+        const newUser = await prismaClient.user.create({
           data: {
             ...body,
             password: await Bun.password.hash(body.password, {
@@ -18,6 +18,20 @@ export const SignUpController = createElysia()
             }),
           },
         });
+
+        const wargaDesaRole = await prismaClient.roles.findUnique({
+          where: { name: "Warga Desa" },
+        });
+
+        if (wargaDesaRole) {
+          await prismaClient.user_has_roles.create({
+            data: {
+              user_id: newUser.id,
+              role_id: wargaDesaRole.id,
+            },
+          });
+        }
+
         return Responses.success(null);
       } catch (error) {
         throw error;
@@ -25,5 +39,5 @@ export const SignUpController = createElysia()
     },
     {
       body: "sign-up",
-    },
+    }
   );
