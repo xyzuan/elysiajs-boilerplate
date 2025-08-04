@@ -132,6 +132,31 @@ export const SkKematianController = createElysia({
         },
       });
 
+      const defaultApprovers = await prismaClient.sk_approver_settings.findMany(
+        {
+          where: {
+            sk_type: SKType.KEMATIAN,
+            is_active: true,
+          },
+          orderBy: {
+            order_priority: "asc",
+          },
+        }
+      );
+
+      if (defaultApprovers.length > 0) {
+        const approverAssignments = defaultApprovers.map((setting) => ({
+          user_sk_id: result.id,
+          user_approver_id: setting.user_approver_id,
+          status: "VERIFY" as const,
+        }));
+
+        await prismaClient.user_sk_has_approver.createMany({
+          data: approverAssignments,
+          skipDuplicates: true,
+        });
+      }
+
       return Responses.success(result);
     },
     {

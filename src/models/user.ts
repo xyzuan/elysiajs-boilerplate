@@ -120,6 +120,23 @@ export const userRelations = t.Object(
       ),
       { additionalProperties: false },
     ),
+    sk_approver_settings: t.Array(
+      t.Object(
+        {
+          id: t.String(),
+          sk_type: t.Union([t.Literal("KEMATIAN"), t.Literal("TIDAK_MAMPU")], {
+            additionalProperties: false,
+          }),
+          user_approver_id: t.String(),
+          is_active: t.Boolean(),
+          order_priority: t.Integer(),
+          createdAt: t.Date(),
+          updatedAt: __nullable__(t.Date()),
+        },
+        { additionalProperties: false },
+      ),
+      { additionalProperties: false },
+    ),
   },
   { additionalProperties: false },
 );
@@ -280,6 +297,22 @@ export const userRelationsInputCreate = t.Object(
         { additionalProperties: false },
       ),
     ),
+    sk_approver_settings: t.Optional(
+      t.Object(
+        {
+          connect: t.Array(
+            t.Object(
+              {
+                id: t.String({ additionalProperties: false }),
+              },
+              { additionalProperties: false },
+            ),
+            { additionalProperties: false },
+          ),
+        },
+        { additionalProperties: false },
+      ),
+    ),
   },
   { additionalProperties: false },
 );
@@ -388,6 +421,31 @@ export const userRelationsInputUpdate = t.Partial(
         ),
       ),
       user_sk_has_approver: t.Partial(
+        t.Object(
+          {
+            connect: t.Array(
+              t.Object(
+                {
+                  id: t.String({ additionalProperties: false }),
+                },
+                { additionalProperties: false },
+              ),
+              { additionalProperties: false },
+            ),
+            disconnect: t.Array(
+              t.Object(
+                {
+                  id: t.String({ additionalProperties: false }),
+                },
+                { additionalProperties: false },
+              ),
+              { additionalProperties: false },
+            ),
+          },
+          { additionalProperties: false },
+        ),
+      ),
+      sk_approver_settings: t.Partial(
         t.Object(
           {
             connect: t.Array(
@@ -552,6 +610,7 @@ export const userSelect = t.Partial(
       user_roles: t.Boolean(),
       user_permissions: t.Boolean(),
       user_sk_has_approver: t.Boolean(),
+      sk_approver_settings: t.Boolean(),
       _count: t.Boolean(),
     },
     { additionalProperties: false },
@@ -568,6 +627,7 @@ export const userInclude = t.Partial(
       user_roles: t.Boolean(),
       user_permissions: t.Boolean(),
       user_sk_has_approver: t.Boolean(),
+      sk_approver_settings: t.Boolean(),
       _count: t.Boolean(),
     },
     { additionalProperties: false },

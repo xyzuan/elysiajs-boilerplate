@@ -14,6 +14,13 @@ async function main() {
     await import("./user.seed");
     console.log("✅ Users seeded successfully");
 
+    console.log("🔧 Seeding SK approver settings...");
+    const { seedSKApproverSettings } = await import(
+      "./sk_approver_settings.seed"
+    );
+    await seedSKApproverSettings();
+    console.log("✅ SK approver settings seeded successfully");
+
     console.log("🎉 All seeding completed successfully!");
   } catch (error) {
     console.error("❌ Error during seeding:", error);

@@ -70,6 +70,7 @@ model user {
   user_roles           user_has_roles[]
   user_permissions     user_has_permissions[]
   user_sk_has_approver user_sk_has_approver[]
+  sk_approver_settings sk_approver_settings[]
 }
 
 model roles {
@@ -165,6 +166,21 @@ model user_sk_has_approver {
   approver user    @relation(fields: [user_approver_id], references: [id])
 
   @@unique([user_sk_id, user_approver_id])
+}
+
+model sk_approver_settings {
+  id               String    @id @default(cuid())
+  sk_type          SKType
+  user_approver_id String
+  is_active        Boolean   @default(true)
+  order_priority   Int       @default(1)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime? @updatedAt
+
+  approver user @relation(fields: [user_approver_id], references: [id], onDelete: Cascade)
+
+  @@unique([sk_type, user_approver_id])
+  @@index([sk_type, is_active, order_priority])
 }
 
 model sk_kematian {

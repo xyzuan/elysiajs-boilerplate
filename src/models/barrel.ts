@@ -11,6 +11,7 @@ export * from "./user_has_permissions";
 export * from "./refresh_tokens";
 export * from "./user_sk";
 export * from "./user_sk_has_approver";
+export * from "./sk_approver_settings";
 export * from "./sk_kematian";
 export * from "./sk_tidak_mampu";
 export * from "./__nullable__";

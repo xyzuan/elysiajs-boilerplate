@@ -12,6 +12,11 @@ async function seedRolesAndPermissions() {
     { name: "VIEW_SK" },
     { name: "REQUEST_SK" },
     { name: "APPROVE_SK" },
+    { name: "MANAGE_USERS" },
+    { name: "MANAGE_SK_APPROVERS" },
+    { name: "USER_DASHBOARD" },
+    { name: "ADMIN_DASHBOARD" },
+    { name: "MANAGE_ROLES_PERMISSIONS" },
   ];
 
   for (const role of roles) {
