@@ -5,6 +5,7 @@ import { users } from "./users";
 import { skList } from "./sk-list";
 import { skDownload } from "./sk-download";
 import { skApproverSettings } from "./sk-approver-settings";
+import { skDetail } from "./sk-detail";
 
 export default createElysia().group("/admin", (api) =>
   api
@@ -14,4 +15,5 @@ export default createElysia().group("/admin", (api) =>
     .use(skList)
     .use(skDownload)
     .use(skApproverSettings)
+    .use(skDetail)
 );
