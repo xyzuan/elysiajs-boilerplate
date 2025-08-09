@@ -9,6 +9,7 @@ import { Gender, MaritalStatus, SKType } from "@prisma/client";
 import { parseQuery } from "@utils/queryHandler";
 import Elysia from "elysia";
 import skTidakMampuSchema from "./sk-tidak-mampu.schema";
+import { sk_tidak_mampu } from "../../../models/sk_tidak_mampu";
 
 export const SkTidakMampuController = createElysia({
   prefix: "tidak-mampu",
@@ -39,6 +40,13 @@ export const SkTidakMampuController = createElysia({
                 },
               },
             },
+            {
+              sk_tidak_mampu: {
+                nik: {
+                  contains: search,
+                },
+              },
+            },
           ]
         : undefined,
     };
@@ -64,13 +72,7 @@ export const SkTidakMampuController = createElysia({
             },
           },
         },
-        sk_tidak_mampu: {
-          select: {
-            id: true,
-            name: true,
-            address: true,
-          },
-        },
+        sk_tidak_mampu: true,
       },
     });
 
