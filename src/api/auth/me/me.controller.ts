@@ -35,8 +35,28 @@ export const MeController = createElysia()
       ),
     });
   })
-  .get("/me/detail", async ({ user }) => {
-    return Responses.success(user);
+  .get("/me/profile", async ({ user }) => {
+    return Responses.success({
+      ...user,
+      role: user.user_roles.map((userRole) => ({
+        id: userRole.role.id,
+        name: userRole.role.name,
+      })),
+      permissions: Array.from(
+        new Map([
+          ...user.user_roles
+            .flatMap((roles) => roles.role.permissions)
+            .map((permissions) => [
+              permissions.permission.id,
+              permissions.permission,
+            ]),
+          ...user.user_permissions.map((userPermission) => [
+            userPermission.permission.id,
+            userPermission.permission,
+          ]),
+        ] as [string, { id: string; name: string }][]).values()
+      ),
+    });
   })
   .get("/me/check-profile", ({ user }) => {
     const requiredFields = [
