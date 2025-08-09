@@ -9,6 +9,7 @@ import { Gender, SKType } from "@prisma/client";
 import { parseQuery } from "@utils/queryHandler";
 import Elysia from "elysia";
 import skKematianSchema from "./sk-kematian.schema";
+import { sk_kematian } from "../../../models/sk_kematian";
 
 export const SkKematianController = createElysia({
   prefix: "kematian",
@@ -39,6 +40,13 @@ export const SkKematianController = createElysia({
                 },
               },
             },
+            {
+              sk_kematian: {
+                nik: {
+                  contains: search,
+                },
+              },
+            },
           ]
         : undefined,
     };
@@ -64,14 +72,7 @@ export const SkKematianController = createElysia({
             },
           },
         },
-        sk_kematian: {
-          select: {
-            id: true,
-            name: true,
-            address: true,
-            death_date: true,
-          },
-        },
+        sk_kematian: true,
       },
     });
 

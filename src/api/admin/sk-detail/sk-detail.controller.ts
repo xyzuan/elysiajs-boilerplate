@@ -17,21 +17,7 @@ export const skDetailController = createElysia({
         sk_type: SKType.KEMATIAN,
       },
       include: {
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            nik: true,
-            address: true,
-            born_birth: true,
-            born_place: true,
-            religion: true,
-            gender: true,
-            marital_status: true,
-            work: true,
-          },
-        },
+        user: true,
         user_approvers: {
           include: {
             approver: {
@@ -58,6 +44,44 @@ export const skDetailController = createElysia({
 
     if (!result) {
       throw new NotFoundException("SK Kematian not found");
+    }
+
+    return Responses.success(result);
+  })
+  .get("tidak-mampu/:id", async ({ params: { id } }) => {
+    const result = await prismaClient.user_sk.findUnique({
+      where: {
+        id,
+        sk_type: SKType.TIDAK_MAMPU,
+      },
+      include: {
+        user: true,
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+                user_roles: {
+                  select: {
+                    role: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        sk_tidak_mampu: true,
+      },
+    });
+
+    if (!result) {
+      throw new NotFoundException("SK Tidak Mampu not found");
     }
 
     return Responses.success(result);

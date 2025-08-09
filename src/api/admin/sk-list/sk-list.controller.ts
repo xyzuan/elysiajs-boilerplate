@@ -107,7 +107,6 @@ export const skListController = createElysia({
           orderBy: {
             createdAt: "desc",
           },
-          take: 1, // Get latest approval status
         },
         sk_kematian: {
           select: {
