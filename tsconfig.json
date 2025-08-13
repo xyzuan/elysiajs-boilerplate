@@ -11,8 +11,7 @@
       "@utils/*": ["./src/utils/*"],
       "@libs/*": ["./src/libs/*"],
       "@middlewares/*": ["./src/middlewares/*"],
-      "@interfaces/*": ["./src/interfaces/*"],
-      "@documents/*": ["./src/documents/*"]
+      "@interfaces/*": ["./src/interfaces/*"]
     },
     "types": ["bun-types"],
     "esModuleInterop": true,
