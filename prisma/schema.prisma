@@ -33,6 +33,13 @@ enum SKStatus {
 enum SKType {
   KEMATIAN
   TIDAK_MAMPU
+  DISPENSASI
+  BEDA_NAMA
+  DOMISILI
+  KEHILANGAN
+  KELAHIRAN
+  USAHA
+  KTP_SEMENTARA
 }
 
 enum MaritalStatus {
@@ -53,6 +60,7 @@ model user {
   id             String         @id @default(uuid())
   name           String         @db.VarChar(60)
   email          String         @unique
+  phone_number   String?        @db.VarChar(15)
   password       String
   born_birth     DateTime?
   born_place     String?
@@ -151,6 +159,13 @@ model user_sk {
   user           user                   @relation(fields: [user_id], references: [id])
   sk_kematian    sk_kematian?
   sk_tidak_mampu sk_tidak_mampu?
+  sk_dispensasi  sk_dispensasi?
+  sk_beda_nama   sk_beda_nama?
+  sk_domisili    sk_domisili?
+  sk_kehilangan  sk_kehilangan?
+  sk_kelahiran   sk_kelahiran?
+  sk_usaha       sk_usaha?
+  sk_ktp_sementara sk_ktp_sementara?
   user_approvers user_sk_has_approver[]
 }
 
@@ -219,4 +234,135 @@ model sk_tidak_mampu {
 
   user_sk_id String?  @unique
   user_sk    user_sk? @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
+}
+
+model sk_dispensasi {
+  id             String    @id @default(cuid())
+  name           String
+  born_birth     DateTime
+  born_place     String
+  gender         Gender
+  nik            String
+  religion       String
+  address        String
+  marital_status MaritalStatus
+  start_date     DateTime
+  end_date       DateTime
+  reason         String
+  purpose        String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+
+  user_sk_id     String?  @unique
+  user_sk        user_sk? @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
+}
+
+model sk_beda_nama {
+  id             String    @id @default(cuid())
+  name           String
+  born_birth     DateTime
+  born_place     String
+  gender         Gender
+  nik            String
+  no_kk          String
+  religion       String
+  address        String
+  marital_status MaritalStatus
+  false_document String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+
+  user_sk_id     String?  @unique
+  user_sk        user_sk? @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
+}
+
+model sk_domisili {
+  id             String    @id @default(cuid())
+  name           String
+  born_birth     DateTime
+  born_place     String
+  gender         Gender
+  nik            String
+  religion       String
+  address        String
+  marital_status MaritalStatus
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+
+  user_sk_id     String?  @unique
+  user_sk        user_sk? @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
+}
+
+model sk_kehilangan {
+  id             String    @id @default(cuid())
+  name           String
+  born_birth     DateTime
+  born_place     String
+  gender         Gender
+  nik            String
+  religion       String
+  address        String
+  marital_status MaritalStatus
+  lost_object    String
+  lost_place     String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+
+  user_sk_id     String?  @unique
+  user_sk        user_sk? @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
+}
+
+model sk_kelahiran {
+  id             String    @id @default(cuid())
+  name           String
+  born_birth     DateTime
+  born_place     String
+  gender         Gender
+  nik            String
+  religion       String
+  address        String
+  marital_status MaritalStatus
+  father_name    String
+  mother_name    String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+
+  user_sk_id     String?  @unique
+  user_sk        user_sk? @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
+}
+
+model sk_usaha {
+  id             String    @id @default(cuid())
+  name           String
+  born_birth     DateTime
+  born_place     String
+  gender         Gender
+  nik            String
+  religion       String
+  address        String
+  marital_status MaritalStatus
+  bussiness      String
+  reason         String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+
+  user_sk_id     String?  @unique
+  user_sk        user_sk? @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
+}
+
+model sk_ktp_sementara {
+  id             String    @id @default(cuid())
+  name           String
+  born_birth     DateTime
+  born_place     String
+  gender         Gender
+  nik            String
+  religion       String
+  address        String
+  marital_status MaritalStatus
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime? @updatedAt
+
+  user_sk_id     String?  @unique
+  user_sk        user_sk? @relation(fields: [user_sk_id], references: [id], onDelete: Cascade)
 }

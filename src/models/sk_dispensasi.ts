@@ -4,21 +4,33 @@ import { __transformDate__ } from "./__transformDate__";
 
 import { __nullable__ } from "./__nullable__";
 
-export const sk_kematianPlain = t.Object(
+export const sk_dispensasiPlain = t.Object(
   {
     id: t.String(),
     name: t.String(),
     born_birth: t.Date(),
     born_place: t.String(),
-    nik: t.String(),
     gender: t.Union([t.Literal("MALE"), t.Literal("FEMALE")], {
       additionalProperties: false,
     }),
+    nik: t.String(),
     religion: t.String(),
     address: t.String(),
-    death_date: t.Date(),
-    death_place: t.String(),
-    death_reason: t.String(),
+    marital_status: t.Union(
+      [
+        t.Literal("SINGLE"),
+        t.Literal("MARRIED"),
+        t.Literal("DIVORCED"),
+        t.Literal("WIDOWED"),
+        t.Literal("SEPARATED"),
+        t.Literal("SIRI"),
+      ],
+      { additionalProperties: false },
+    ),
+    start_date: t.Date(),
+    end_date: t.Date(),
+    reason: t.String(),
+    purpose: t.String(),
     createdAt: t.Date(),
     updatedAt: __nullable__(t.Date()),
     user_sk_id: __nullable__(t.String()),
@@ -26,7 +38,7 @@ export const sk_kematianPlain = t.Object(
   { additionalProperties: false },
 );
 
-export const sk_kematianRelations = t.Object(
+export const sk_dispensasiRelations = t.Object(
   {
     user_sk: __nullable__(
       t.Object(
@@ -57,45 +69,71 @@ export const sk_kematianRelations = t.Object(
   { additionalProperties: false },
 );
 
-export const sk_kematianPlainInputCreate = t.Object(
+export const sk_dispensasiPlainInputCreate = t.Object(
   {
     name: t.String(),
     born_birth: t.Date(),
     born_place: t.String(),
-    nik: t.String(),
     gender: t.Union([t.Literal("MALE"), t.Literal("FEMALE")], {
       additionalProperties: false,
     }),
+    nik: t.String(),
     religion: t.String(),
     address: t.String(),
-    death_date: t.Date(),
-    death_place: t.String(),
-    death_reason: t.String(),
+    marital_status: t.Union(
+      [
+        t.Literal("SINGLE"),
+        t.Literal("MARRIED"),
+        t.Literal("DIVORCED"),
+        t.Literal("WIDOWED"),
+        t.Literal("SEPARATED"),
+        t.Literal("SIRI"),
+      ],
+      { additionalProperties: false },
+    ),
+    start_date: t.Date(),
+    end_date: t.Date(),
+    reason: t.String(),
+    purpose: t.String(),
   },
   { additionalProperties: false },
 );
 
-export const sk_kematianPlainInputUpdate = t.Object(
+export const sk_dispensasiPlainInputUpdate = t.Object(
   {
     name: t.Optional(t.String()),
     born_birth: t.Optional(t.Date()),
     born_place: t.Optional(t.String()),
-    nik: t.Optional(t.String()),
     gender: t.Optional(
       t.Union([t.Literal("MALE"), t.Literal("FEMALE")], {
         additionalProperties: false,
       }),
     ),
+    nik: t.Optional(t.String()),
     religion: t.Optional(t.String()),
     address: t.Optional(t.String()),
-    death_date: t.Optional(t.Date()),
-    death_place: t.Optional(t.String()),
-    death_reason: t.Optional(t.String()),
+    marital_status: t.Optional(
+      t.Union(
+        [
+          t.Literal("SINGLE"),
+          t.Literal("MARRIED"),
+          t.Literal("DIVORCED"),
+          t.Literal("WIDOWED"),
+          t.Literal("SEPARATED"),
+          t.Literal("SIRI"),
+        ],
+        { additionalProperties: false },
+      ),
+    ),
+    start_date: t.Optional(t.Date()),
+    end_date: t.Optional(t.Date()),
+    reason: t.Optional(t.String()),
+    purpose: t.Optional(t.String()),
   },
   { additionalProperties: false },
 );
 
-export const sk_kematianRelationsInputCreate = t.Object(
+export const sk_dispensasiRelationsInputCreate = t.Object(
   {
     user_sk: t.Optional(
       t.Object(
@@ -114,7 +152,7 @@ export const sk_kematianRelationsInputCreate = t.Object(
   { additionalProperties: false },
 );
 
-export const sk_kematianRelationsInputUpdate = t.Partial(
+export const sk_dispensasiRelationsInputUpdate = t.Partial(
   t.Object(
     {
       user_sk: t.Partial(
@@ -136,7 +174,7 @@ export const sk_kematianRelationsInputUpdate = t.Partial(
   ),
 );
 
-export const sk_kematianWhere = t.Partial(
+export const sk_dispensasiWhere = t.Partial(
   t.Recursive(
     (Self) =>
       t.Object(
@@ -148,26 +186,38 @@ export const sk_kematianWhere = t.Partial(
           name: t.String(),
           born_birth: t.Date(),
           born_place: t.String(),
-          nik: t.String(),
           gender: t.Union([t.Literal("MALE"), t.Literal("FEMALE")], {
             additionalProperties: false,
           }),
+          nik: t.String(),
           religion: t.String(),
           address: t.String(),
-          death_date: t.Date(),
-          death_place: t.String(),
-          death_reason: t.String(),
+          marital_status: t.Union(
+            [
+              t.Literal("SINGLE"),
+              t.Literal("MARRIED"),
+              t.Literal("DIVORCED"),
+              t.Literal("WIDOWED"),
+              t.Literal("SEPARATED"),
+              t.Literal("SIRI"),
+            ],
+            { additionalProperties: false },
+          ),
+          start_date: t.Date(),
+          end_date: t.Date(),
+          reason: t.String(),
+          purpose: t.String(),
           createdAt: t.Date(),
           updatedAt: t.Date(),
           user_sk_id: t.String(),
         },
         { additionalProperties: false },
       ),
-    { $id: "sk_kematian" },
+    { $id: "sk_dispensasi" },
   ),
 );
 
-export const sk_kematianWhereUnique = t.Recursive(
+export const sk_dispensasiWhereUnique = t.Recursive(
   (Self) =>
     t.Intersect(
       [
@@ -203,15 +253,27 @@ export const sk_kematianWhereUnique = t.Recursive(
               name: t.String(),
               born_birth: t.Date(),
               born_place: t.String(),
-              nik: t.String(),
               gender: t.Union([t.Literal("MALE"), t.Literal("FEMALE")], {
                 additionalProperties: false,
               }),
+              nik: t.String(),
               religion: t.String(),
               address: t.String(),
-              death_date: t.Date(),
-              death_place: t.String(),
-              death_reason: t.String(),
+              marital_status: t.Union(
+                [
+                  t.Literal("SINGLE"),
+                  t.Literal("MARRIED"),
+                  t.Literal("DIVORCED"),
+                  t.Literal("WIDOWED"),
+                  t.Literal("SEPARATED"),
+                  t.Literal("SIRI"),
+                ],
+                { additionalProperties: false },
+              ),
+              start_date: t.Date(),
+              end_date: t.Date(),
+              reason: t.String(),
+              purpose: t.String(),
               createdAt: t.Date(),
               updatedAt: t.Date(),
               user_sk_id: t.String(),
@@ -222,23 +284,25 @@ export const sk_kematianWhereUnique = t.Recursive(
       ],
       { additionalProperties: false },
     ),
-  { $id: "sk_kematian" },
+  { $id: "sk_dispensasi" },
 );
 
-export const sk_kematianSelect = t.Partial(
+export const sk_dispensasiSelect = t.Partial(
   t.Object(
     {
       id: t.Boolean(),
       name: t.Boolean(),
       born_birth: t.Boolean(),
       born_place: t.Boolean(),
-      nik: t.Boolean(),
       gender: t.Boolean(),
+      nik: t.Boolean(),
       religion: t.Boolean(),
       address: t.Boolean(),
-      death_date: t.Boolean(),
-      death_place: t.Boolean(),
-      death_reason: t.Boolean(),
+      marital_status: t.Boolean(),
+      start_date: t.Boolean(),
+      end_date: t.Boolean(),
+      reason: t.Boolean(),
+      purpose: t.Boolean(),
       createdAt: t.Boolean(),
       updatedAt: t.Boolean(),
       user_sk_id: t.Boolean(),
@@ -249,14 +313,19 @@ export const sk_kematianSelect = t.Partial(
   ),
 );
 
-export const sk_kematianInclude = t.Partial(
+export const sk_dispensasiInclude = t.Partial(
   t.Object(
-    { gender: t.Boolean(), user_sk: t.Boolean(), _count: t.Boolean() },
+    {
+      gender: t.Boolean(),
+      marital_status: t.Boolean(),
+      user_sk: t.Boolean(),
+      _count: t.Boolean(),
+    },
     { additionalProperties: false },
   ),
 );
 
-export const sk_kematianOrderBy = t.Partial(
+export const sk_dispensasiOrderBy = t.Partial(
   t.Object(
     {
       id: t.Union([t.Literal("asc"), t.Literal("desc")], {
@@ -280,13 +349,16 @@ export const sk_kematianOrderBy = t.Partial(
       address: t.Union([t.Literal("asc"), t.Literal("desc")], {
         additionalProperties: false,
       }),
-      death_date: t.Union([t.Literal("asc"), t.Literal("desc")], {
+      start_date: t.Union([t.Literal("asc"), t.Literal("desc")], {
         additionalProperties: false,
       }),
-      death_place: t.Union([t.Literal("asc"), t.Literal("desc")], {
+      end_date: t.Union([t.Literal("asc"), t.Literal("desc")], {
         additionalProperties: false,
       }),
-      death_reason: t.Union([t.Literal("asc"), t.Literal("desc")], {
+      reason: t.Union([t.Literal("asc"), t.Literal("desc")], {
+        additionalProperties: false,
+      }),
+      purpose: t.Union([t.Literal("asc"), t.Literal("desc")], {
         additionalProperties: false,
       }),
       createdAt: t.Union([t.Literal("asc"), t.Literal("desc")], {
@@ -303,17 +375,17 @@ export const sk_kematianOrderBy = t.Partial(
   ),
 );
 
-export const sk_kematian = t.Composite(
-  [sk_kematianPlain, sk_kematianRelations],
+export const sk_dispensasi = t.Composite(
+  [sk_dispensasiPlain, sk_dispensasiRelations],
   { additionalProperties: false },
 );
 
-export const sk_kematianInputCreate = t.Composite(
-  [sk_kematianPlainInputCreate, sk_kematianRelationsInputCreate],
+export const sk_dispensasiInputCreate = t.Composite(
+  [sk_dispensasiPlainInputCreate, sk_dispensasiRelationsInputCreate],
   { additionalProperties: false },
 );
 
-export const sk_kematianInputUpdate = t.Composite(
-  [sk_kematianPlainInputUpdate, sk_kematianRelationsInputUpdate],
+export const sk_dispensasiInputUpdate = t.Composite(
+  [sk_dispensasiPlainInputUpdate, sk_dispensasiRelationsInputUpdate],
   { additionalProperties: false },
 );

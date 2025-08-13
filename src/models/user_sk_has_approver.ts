@@ -30,9 +30,20 @@ export const user_sk_has_approverRelations = t.Object(
       {
         id: t.String(),
         user_id: t.String(),
-        sk_type: t.Union([t.Literal("KEMATIAN"), t.Literal("TIDAK_MAMPU")], {
-          additionalProperties: false,
-        }),
+        sk_type: t.Union(
+          [
+            t.Literal("KEMATIAN"),
+            t.Literal("TIDAK_MAMPU"),
+            t.Literal("DISPENSASI"),
+            t.Literal("BEDA_NAMA"),
+            t.Literal("DOMISILI"),
+            t.Literal("KEHILANGAN"),
+            t.Literal("KELAHIRAN"),
+            t.Literal("USAHA"),
+            t.Literal("KTP_SEMENTARA"),
+          ],
+          { additionalProperties: false },
+        ),
         createdAt: t.Date(),
         updatedAt: __nullable__(t.Date()),
       },
@@ -43,6 +54,7 @@ export const user_sk_has_approverRelations = t.Object(
         id: t.String(),
         name: t.String(),
         email: t.String(),
+        phone_number: __nullable__(t.String()),
         password: t.String(),
         born_birth: __nullable__(t.Date()),
         born_place: __nullable__(t.String()),

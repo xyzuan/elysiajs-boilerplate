@@ -23,6 +23,7 @@ export const refresh_tokensRelations = t.Object(
         id: t.String(),
         name: t.String(),
         email: t.String(),
+        phone_number: __nullable__(t.String()),
         password: t.String(),
         born_birth: __nullable__(t.Date()),
         born_place: __nullable__(t.String()),

@@ -9,6 +9,7 @@ export const userPlain = t.Object(
     id: t.String(),
     name: t.String(),
     email: t.String(),
+    phone_number: __nullable__(t.String()),
     password: t.String(),
     born_birth: __nullable__(t.Date()),
     born_place: __nullable__(t.String()),
@@ -47,9 +48,20 @@ export const userRelations = t.Object(
         {
           id: t.String(),
           user_id: t.String(),
-          sk_type: t.Union([t.Literal("KEMATIAN"), t.Literal("TIDAK_MAMPU")], {
-            additionalProperties: false,
-          }),
+          sk_type: t.Union(
+            [
+              t.Literal("KEMATIAN"),
+              t.Literal("TIDAK_MAMPU"),
+              t.Literal("DISPENSASI"),
+              t.Literal("BEDA_NAMA"),
+              t.Literal("DOMISILI"),
+              t.Literal("KEHILANGAN"),
+              t.Literal("KELAHIRAN"),
+              t.Literal("USAHA"),
+              t.Literal("KTP_SEMENTARA"),
+            ],
+            { additionalProperties: false },
+          ),
           createdAt: t.Date(),
           updatedAt: __nullable__(t.Date()),
         },
@@ -124,9 +136,20 @@ export const userRelations = t.Object(
       t.Object(
         {
           id: t.String(),
-          sk_type: t.Union([t.Literal("KEMATIAN"), t.Literal("TIDAK_MAMPU")], {
-            additionalProperties: false,
-          }),
+          sk_type: t.Union(
+            [
+              t.Literal("KEMATIAN"),
+              t.Literal("TIDAK_MAMPU"),
+              t.Literal("DISPENSASI"),
+              t.Literal("BEDA_NAMA"),
+              t.Literal("DOMISILI"),
+              t.Literal("KEHILANGAN"),
+              t.Literal("KELAHIRAN"),
+              t.Literal("USAHA"),
+              t.Literal("KTP_SEMENTARA"),
+            ],
+            { additionalProperties: false },
+          ),
           user_approver_id: t.String(),
           is_active: t.Boolean(),
           order_priority: t.Integer(),
@@ -145,6 +168,7 @@ export const userPlainInputCreate = t.Object(
   {
     name: t.String(),
     email: t.String(),
+    phone_number: t.Optional(__nullable__(t.String())),
     password: t.String(),
     born_birth: t.Optional(__nullable__(t.Date())),
     born_place: t.Optional(__nullable__(t.String())),
@@ -182,6 +206,7 @@ export const userPlainInputUpdate = t.Object(
   {
     name: t.Optional(t.String()),
     email: t.Optional(t.String()),
+    phone_number: t.Optional(__nullable__(t.String())),
     password: t.Optional(t.String()),
     born_birth: t.Optional(__nullable__(t.Date())),
     born_place: t.Optional(__nullable__(t.String())),
@@ -486,6 +511,7 @@ export const userWhere = t.Partial(
           id: t.String(),
           name: t.String(),
           email: t.String(),
+          phone_number: t.String(),
           password: t.String(),
           born_birth: t.Date(),
           born_place: t.String(),
@@ -555,6 +581,7 @@ export const userWhereUnique = t.Recursive(
               id: t.String(),
               name: t.String(),
               email: t.String(),
+              phone_number: t.String(),
               password: t.String(),
               born_birth: t.Date(),
               born_place: t.String(),
@@ -594,6 +621,7 @@ export const userSelect = t.Partial(
       id: t.Boolean(),
       name: t.Boolean(),
       email: t.Boolean(),
+      phone_number: t.Boolean(),
       password: t.Boolean(),
       born_birth: t.Boolean(),
       born_place: t.Boolean(),
@@ -644,6 +672,9 @@ export const userOrderBy = t.Partial(
         additionalProperties: false,
       }),
       email: t.Union([t.Literal("asc"), t.Literal("desc")], {
+        additionalProperties: false,
+      }),
+      phone_number: t.Union([t.Literal("asc"), t.Literal("desc")], {
         additionalProperties: false,
       }),
       password: t.Union([t.Literal("asc"), t.Literal("desc")], {

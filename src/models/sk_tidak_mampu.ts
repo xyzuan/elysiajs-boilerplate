@@ -43,9 +43,20 @@ export const sk_tidak_mampuRelations = t.Object(
         {
           id: t.String(),
           user_id: t.String(),
-          sk_type: t.Union([t.Literal("KEMATIAN"), t.Literal("TIDAK_MAMPU")], {
-            additionalProperties: false,
-          }),
+          sk_type: t.Union(
+            [
+              t.Literal("KEMATIAN"),
+              t.Literal("TIDAK_MAMPU"),
+              t.Literal("DISPENSASI"),
+              t.Literal("BEDA_NAMA"),
+              t.Literal("DOMISILI"),
+              t.Literal("KEHILANGAN"),
+              t.Literal("KELAHIRAN"),
+              t.Literal("USAHA"),
+              t.Literal("KTP_SEMENTARA"),
+            ],
+            { additionalProperties: false },
+          ),
           createdAt: t.Date(),
           updatedAt: __nullable__(t.Date()),
         },
