@@ -82,6 +82,41 @@ export const SkMyList = createElysia()
             name: true,
           },
         },
+        sk_beda_nama: {
+          select: {
+            name: true,
+          },
+        },
+        sk_dispensasi: {
+          select: {
+            name: true,
+          },
+        },
+        sk_domisili: {
+          select: {
+            name: true,
+          },
+        },
+        sk_kehilangan: {
+          select: {
+            name: true,
+          },
+        },
+        sk_kelahiran: {
+          select: {
+            name: true,
+          },
+        },
+        sk_ktp_sementara: {
+          select: {
+            name: true,
+          },
+        },
+        sk_usaha: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
 

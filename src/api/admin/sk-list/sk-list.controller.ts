@@ -124,6 +124,60 @@ export const skListController = createElysia({
             reason: true,
           },
         },
+        sk_beda_nama: {
+          select: {
+            id: true,
+            name: true,
+            nik: true,
+            false_document: true,
+          },
+        },
+        sk_dispensasi: {
+          select: {
+            id: true,
+            name: true,
+            nik: true,
+            reason: true,
+          },
+        },
+        sk_domisili: {
+          select: {
+            id: true,
+            name: true,
+            nik: true,
+            address: true,
+          },
+        },
+        sk_kehilangan: {
+          select: {
+            id: true,
+            name: true,
+            nik: true,
+            lost_object: true,
+          },
+        },
+        sk_kelahiran: {
+          select: {
+            id: true,
+            name: true,
+            nik: true,
+          },
+        },
+        sk_ktp_sementara: {
+          select: {
+            id: true,
+            name: true,
+            nik: true,
+          },
+        },
+        sk_usaha: {
+          select: {
+            id: true,
+            name: true,
+            nik: true,
+            bussiness: true,
+          },
+        },
       },
     });
 
@@ -177,6 +231,13 @@ export const skListController = createElysia({
         },
         sk_kematian: true,
         sk_tidak_mampu: true,
+        sk_beda_nama: true,
+        sk_dispensasi: true,
+        sk_domisili: true,
+        sk_kehilangan: true,
+        sk_kelahiran: true,
+        sk_ktp_sementara: true,
+        sk_usaha: true,
       },
     });
 

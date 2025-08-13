@@ -85,4 +85,270 @@ export const skDetailController = createElysia({
     }
 
     return Responses.success(result);
+  })
+  .get("dispensasi/:id", async ({ params: { id } }) => {
+    const result = await prismaClient.user_sk.findUnique({
+      where: {
+        id,
+        sk_type: SKType.DISPENSASI,
+      },
+      include: {
+        user: true,
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+                user_roles: {
+                  select: {
+                    role: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        sk_dispensasi: true,
+      },
+    });
+
+    if (!result) {
+      throw new NotFoundException("SK Dispensasi not found");
+    }
+
+    return Responses.success(result);
+  })
+  .get("beda-nama/:id", async ({ params: { id } }) => {
+    const result = await prismaClient.user_sk.findUnique({
+      where: {
+        id,
+        sk_type: SKType.BEDA_NAMA,
+      },
+      include: {
+        user: true,
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+                user_roles: {
+                  select: {
+                    role: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        sk_beda_nama: true,
+      },
+    });
+
+    if (!result) {
+      throw new NotFoundException("SK Beda Nama not found");
+    }
+
+    return Responses.success(result);
+  })
+  .get("domisili/:id", async ({ params: { id } }) => {
+    const result = await prismaClient.user_sk.findUnique({
+      where: {
+        id,
+        sk_type: SKType.DOMISILI,
+      },
+      include: {
+        user: true,
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+                user_roles: {
+                  select: {
+                    role: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        sk_domisili: true,
+      },
+    });
+
+    if (!result) {
+      throw new NotFoundException("SK Domisili not found");
+    }
+
+    return Responses.success(result);
+  })
+  .get("kehilangan/:id", async ({ params: { id } }) => {
+    const result = await prismaClient.user_sk.findUnique({
+      where: {
+        id,
+        sk_type: SKType.KEHILANGAN,
+      },
+      include: {
+        user: true,
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+                user_roles: {
+                  select: {
+                    role: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        sk_kehilangan: true,
+      },
+    });
+
+    if (!result) {
+      throw new NotFoundException("SK Kehilangan not found");
+    }
+
+    return Responses.success(result);
+  })
+  .get("kelahiran/:id", async ({ params: { id } }) => {
+    const result = await prismaClient.user_sk.findUnique({
+      where: {
+        id,
+        sk_type: SKType.KELAHIRAN,
+      },
+      include: {
+        user: true,
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+                user_roles: {
+                  select: {
+                    role: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        sk_kelahiran: true,
+      },
+    });
+
+    if (!result) {
+      throw new NotFoundException("SK Kelahiran not found");
+    }
+
+    return Responses.success(result);
+  })
+  .get("usaha/:id", async ({ params: { id } }) => {
+    const result = await prismaClient.user_sk.findUnique({
+      where: {
+        id,
+        sk_type: SKType.USAHA,
+      },
+      include: {
+        user: true,
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+                user_roles: {
+                  select: {
+                    role: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        sk_usaha: true,
+      },
+    });
+
+    if (!result) {
+      throw new NotFoundException("SK Usaha not found");
+    }
+
+    return Responses.success(result);
+  })
+  .get("ktp-sementara/:id", async ({ params: { id } }) => {
+    const result = await prismaClient.user_sk.findUnique({
+      where: {
+        id,
+        sk_type: SKType.KTP_SEMENTARA,
+      },
+      include: {
+        user: true,
+        user_approvers: {
+          include: {
+            approver: {
+              select: {
+                id: true,
+                name: true,
+                user_roles: {
+                  select: {
+                    role: {
+                      select: {
+                        id: true,
+                        name: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        sk_ktp_sementara: true,
+      },
+    });
+
+    if (!result) {
+      throw new NotFoundException("SK KTP Sementara not found");
+    }
+
+    return Responses.success(result);
   });
