@@ -101,49 +101,44 @@ export const MeController = createElysia()
   .put(
     "/me",
     async ({ body, user }) => {
-      try {
-        if (body.email && body.email !== user.email) {
-          const existingUser = await prismaClient.user.findUnique({
-            where: { email: body.email },
-          });
-          if (existingUser)
-            throw new ConflictException("Email is already taken");
-        }
-
-        if (body.nik && body.nik !== user.nik) {
-          const existingUser = await prismaClient.user.findUnique({
-            where: { nik: body.nik },
-          });
-          if (existingUser) throw new ConflictException("NIK is already taken");
-        }
-
-        const updatedUser = await prismaClient.user.update({
-          where: { id: user.id },
-          data: {
-            ...body,
-            updatedAt: new Date(),
-          },
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            born_birth: true,
-            born_place: true,
-            gender: true,
-            work: true,
-            marital_status: true,
-            nik: true,
-            religion: true,
-            address: true,
-            createdAt: true,
-            updatedAt: true,
-          },
+      if (body.email && body.email !== user.email) {
+        const existingUser = await prismaClient.user.findUnique({
+          where: { email: body.email },
         });
-
-        return Responses.success(updatedUser);
-      } catch (error) {
-        throw error;
+        if (existingUser) throw new ConflictException("Email is already taken");
       }
+
+      if (body.nik && body.nik !== user.nik) {
+        const existingUser = await prismaClient.user.findUnique({
+          where: { nik: body.nik },
+        });
+        if (existingUser) throw new ConflictException("NIK is already taken");
+      }
+
+      const updatedUser = await prismaClient.user.update({
+        where: { id: user.id },
+        data: {
+          ...body,
+          updatedAt: new Date(),
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          born_birth: true,
+          born_place: true,
+          gender: true,
+          work: true,
+          marital_status: true,
+          nik: true,
+          religion: true,
+          address: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+
+      return Responses.success(updatedUser);
     },
     {
       body: "update-profile",
